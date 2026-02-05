@@ -198,7 +198,7 @@ function showSection(sectionId) {
 // Dashboard Navigation
 function showDashboardSection(sectionId) {
     // Hide all sections
-    ['dashboard-home', 'assessment-section', 'ai-assistant-section'].forEach(id => {
+    ['dashboard-home', 'assessment-section', 'ai-assistant-section', 'roadmap-section', 'compiler-section', 'library-section'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
     });
@@ -207,7 +207,12 @@ function showDashboardSection(sectionId) {
     const selected = document.getElementById(sectionId);
     if (selected) selected.classList.remove('hidden');
 
-    // Note: You might want to update active state on sidebar links here
+    // Update active state on sidebar links
+    document.querySelectorAll('.menu-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    const activeLink = document.querySelector(`[onclick*="${sectionId}"]`);
+    if (activeLink) activeLink.classList.add('active');
 }
 
 // Start assessment

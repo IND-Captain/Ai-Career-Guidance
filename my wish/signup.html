@@ -22,12 +22,8 @@
         <div class="form-panel active" id="signupPanel">
             <!-- Logo and title -->
             <div class="logo-container">
-                <div
-                    class="w-16 h-16 rounded-2xl bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center mb-4 mx-auto shadow-lg">
-                    <i class="fas fa-compass text-3xl text-white"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-center mb-1">Join CareerPath</h1>
-                <p class="text-sm text-center opacity-70 mb-6">Create your account to get started</p>
+                <img src="logo.png" alt="Cognify Logo" class="h-36 w-auto mx-auto mb-6"
+                    style="filter: brightness(0) invert(1);">
             </div>
 
             <!-- Error message -->
@@ -575,6 +571,35 @@
             });
         });
     </script>
+
+    <!-- Footer -->
+    <footer class="glass mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <img src="logo.png" alt="Cognify Logo" class="h-10 w-auto mx-auto md:mx-0 mb-4"
+                        style="filter: brightness(0) invert(1);">
+                    <p class="text-white/70 text-sm">Your AI-powered career recommendation engine.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="main.html" class="text-white/70 hover:text-purple-400 transition-colors">Home</a>
+                        </li>
+                        <li><a href="login.html" class="text-white/70 hover:text-purple-400 transition-colors">Login</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Contact</h3>
+                    <p class="text-white/70 text-sm">support@cognify.com</p>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 pt-6 text-center">
+                <p class="text-white/70 text-sm">&copy; 2026 Cognify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -191,10 +191,11 @@ body {
 /* --- Dashboard Specific Styles --- */
 
 .top-nav {
+    height: 50px;
+    padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
     background-color: var(--sidebar-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

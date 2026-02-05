@@ -19,8 +19,7 @@
     <!-- Top Navigation -->
     <header class="top-nav">
         <div class="logo-container">
-            <div class="logo">C</div>
-            <h1 class="app-name text-white">Cognify</h1>
+            <img src="logo.png" alt="Cognify Logo" class="h-32 w-auto" style="filter: brightness(0) invert(1);">
         </div>
 
         <div class="nav-controls flex items-center gap-4">
@@ -73,6 +72,12 @@
                     <a href="#" class="menu-link" onclick="showDashboardSection('roadmap-section')">
                         <i class="fas fa-map-signs menu-icon"></i>
                         <span>Career Roadmap</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="showDashboardSection('library-section')">
+                        <i class="fas fa-book menu-icon"></i>
+                        <span>Resource Library</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -387,6 +392,211 @@
                 </div>
             </div>
 
+            <!-- Career Roadmap Section -->
+            <div id="roadmap-section" class="hidden fade-in">
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-2xl font-bold">Your Career Roadmap</h2>
+                        <button class="btn-secondary px-4 py-2 rounded-lg flex items-center gap-2">
+                            <i class="fas fa-download"></i> Export Roadmap
+                        </button>
+                    </div>
+
+                    <!-- Roadmap Timeline -->
+                    <div class="relative pl-8">
+                        <!-- Vertical Line -->
+                        <div
+                            class="absolute left-3 top-0 bottom-0 w-1 bg-gradient-to-b from-green-500 via-yellow-500 to-purple-500 rounded-full">
+                        </div>
+
+                        <!-- Milestone 1: Completed -->
+                        <div class="relative mb-12">
+                            <div
+                                class="absolute -left-6 top-2 w-6 h-6 rounded-full bg-green-500 border-4 border-green-300/30 shadow-lg">
+                            </div>
+                            <div class="glass-dark rounded-xl p-6 hover:bg-white/5 transition">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i class="fas fa-graduation-cap text-2xl text-green-400"></i>
+                                            <h3 class="text-xl font-bold">Foundation Building</h3>
+                                        </div>
+                                        <span
+                                            class="inline-block bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm">Completed</span>
+                                    </div>
+                                    <span class="text-white/70 text-sm">0-3 months</span>
+                                </div>
+                                <p class="text-white/80 mb-4">Master HTML, CSS, and JavaScript fundamentals. Complete
+                                    basic projects to build your portfolio.</p>
+                                <div class="flex gap-2">
+                                    <button class="btn-primary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-check-circle"></i> Completed
+                                    </button>
+                                    <button class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-folder"></i> View Projects
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 2: Current -->
+                        <div class="relative mb-12">
+                            <div
+                                class="absolute -left-6 top-2 w-6 h-6 rounded-full bg-yellow-500 border-4 border-yellow-300/30 shadow-lg animate-pulse">
+                            </div>
+                            <div
+                                class="glass-dark rounded-xl p-6 hover:bg-white/5 transition border-2 border-yellow-500/30">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i class="fas fa-code text-2xl text-yellow-400"></i>
+                                            <h3 class="text-xl font-bold">Framework Mastery</h3>
+                                        </div>
+                                        <span
+                                            class="inline-block bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-sm">In
+                                            Progress</span>
+                                    </div>
+                                    <span class="text-white/70 text-sm">3-6 months</span>
+                                </div>
+                                <p class="text-white/80 mb-4">Learn React and TypeScript. Build 3-4 complex applications
+                                    showcasing your skills.</p>
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span class="text-white/70">Progress</span>
+                                        <span class="text-yellow-400 font-semibold">60%</span>
+                                    </div>
+                                    <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full"
+                                            style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn-primary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-play-circle"></i> Continue Learning
+                                    </button>
+                                    <button class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-tasks"></i> View Tasks
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 3: Future -->
+                        <div class="relative mb-12">
+                            <div
+                                class="absolute -left-6 top-2 w-6 h-6 rounded-full bg-purple-500 border-4 border-purple-300/30 shadow-lg opacity-50">
+                            </div>
+                            <div class="glass-dark rounded-xl p-6 hover:bg-white/5 transition opacity-75">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i class="fas fa-server text-2xl text-purple-400"></i>
+                                            <h3 class="text-xl font-bold">Backend Development</h3>
+                                        </div>
+                                        <span
+                                            class="inline-block bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm">Upcoming</span>
+                                    </div>
+                                    <span class="text-white/70 text-sm">6-9 months</span>
+                                </div>
+                                <p class="text-white/80 mb-4">Learn Node.js and databases. Develop full-stack
+                                    applications to demonstrate your versatility.</p>
+                                <div class="flex gap-2">
+                                    <button
+                                        class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2 opacity-50 cursor-not-allowed">
+                                        <i class="fas fa-lock"></i> Locked
+                                    </button>
+                                    <button class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 4: Future -->
+                        <div class="relative mb-12">
+                            <div
+                                class="absolute -left-6 top-2 w-6 h-6 rounded-full bg-blue-500 border-4 border-blue-300/30 shadow-lg opacity-50">
+                            </div>
+                            <div class="glass-dark rounded-xl p-6 hover:bg-white/5 transition opacity-75">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i class="fas fa-briefcase text-2xl text-blue-400"></i>
+                                            <h3 class="text-xl font-bold">Internship Experience</h3>
+                                        </div>
+                                        <span
+                                            class="inline-block bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm">Upcoming</span>
+                                    </div>
+                                    <span class="text-white/70 text-sm">9-12 months</span>
+                                </div>
+                                <p class="text-white/80 mb-4">Apply for internships to gain real-world experience.
+                                    Network with professionals in your field.</p>
+                                <div class="flex gap-2">
+                                    <button
+                                        class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2 opacity-50 cursor-not-allowed">
+                                        <i class="fas fa-lock"></i> Locked
+                                    </button>
+                                    <button class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 5: Future -->
+                        <div class="relative mb-12">
+                            <div
+                                class="absolute -left-6 top-2 w-6 h-6 rounded-full bg-pink-500 border-4 border-pink-300/30 shadow-lg opacity-50">
+                            </div>
+                            <div class="glass-dark rounded-xl p-6 hover:bg-white/5 transition opacity-75">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i class="fas fa-rocket text-2xl text-pink-400"></i>
+                                            <h3 class="text-xl font-bold">Job Application</h3>
+                                        </div>
+                                        <span
+                                            class="inline-block bg-pink-500/20 text-pink-300 px-3 py-1 rounded-full text-sm">Upcoming</span>
+                                    </div>
+                                    <span class="text-white/70 text-sm">12-15 months</span>
+                                </div>
+                                <p class="text-white/80 mb-4">Apply for entry-level positions. Prepare for technical
+                                    interviews and showcase your portfolio.</p>
+                                <div class="flex gap-2">
+                                    <button
+                                        class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2 opacity-50 cursor-not-allowed">
+                                        <i class="fas fa-lock"></i> Locked
+                                    </button>
+                                    <button class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                                        <i class="fas fa-info-circle"></i> Learn More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Overview -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+                        <div class="glass-dark rounded-xl p-4 text-center">
+                            <div class="text-3xl font-bold text-green-400 mb-1">1</div>
+                            <div class="text-white/70 text-sm">Completed</div>
+                        </div>
+                        <div class="glass-dark rounded-xl p-4 text-center">
+                            <div class="text-3xl font-bold text-yellow-400 mb-1">1</div>
+                            <div class="text-white/70 text-sm">In Progress</div>
+                        </div>
+                        <div class="glass-dark rounded-xl p-4 text-center">
+                            <div class="text-3xl font-bold text-purple-400 mb-1">3</div>
+                            <div class="text-white/70 text-sm">Upcoming</div>
+                        </div>
+                        <div class="glass-dark rounded-xl p-4 text-center">
+                            <div class="text-3xl font-bold text-blue-400 mb-1">~12</div>
+                            <div class="text-white/70 text-sm">Months to Goal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Library Section -->
             <div id="library-section" class="hidden fade-in h-full overflow-y-auto">
                 <div class="page-header mb-6">
@@ -484,6 +694,84 @@
 
         </main>
     </div>
+
+    <!-- Footer -->
+    <footer class="glass mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="logo.png" alt="Cognify Logo" class="h-10 w-auto"
+                            style="filter: brightness(0) invert(1);">
+                    </div>
+                    <p class="text-white/70 text-sm mb-4">
+                        Your AI-powered career recommendation engine. Discover personalized career paths, identify skill
+                        gaps, and create a roadmap to professional success.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white/70 hover:text-purple-400 transition-colors"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white/70 hover:text-purple-400 transition-colors"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white/70 hover:text-purple-400 transition-colors"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white/70 hover:text-purple-400 transition-colors"><i
+                                class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="dashboard.html"
+                                class="text-white/70 hover:text-purple-400 transition-colors">Dashboard</a></li>
+                        <li><a href="#" onclick="showDashboardSection('assessment-section')"
+                                class="text-white/70 hover:text-purple-400 transition-colors cursor-pointer">Assessment</a>
+                        </li>
+                        <li><a href="#" onclick="showDashboardSection('roadmap-section')"
+                                class="text-white/70 hover:text-purple-400 transition-colors cursor-pointer">Career
+                                Roadmap</a></li>
+                        <li><a href="settings.html"
+                                class="text-white/70 hover:text-purple-400 transition-colors">Settings</a></li>
+                        <li><a href="main.html" class="text-white/70 hover:text-purple-400 transition-colors">Home</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold text-white mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="showDashboardSection('library-section')"
+                                class="text-white/70 hover:text-purple-400 transition-colors cursor-pointer">Career
+                                Guide</a></li>
+                        <li><a href="#" onclick="showDashboardSection('library-section')"
+                                class="text-white/70 hover:text-purple-400 transition-colors cursor-pointer">Skill
+                                Development</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-purple-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-purple-400 transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold text-white mb-4">Contact</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-white/70"><i
+                                class="fas fa-envelope mr-2"></i><span>support@cognify.com</span></li>
+                        <li class="flex items-center text-white/70"><i class="fas fa-phone mr-2"></i><span>+1 (555)
+                                123-4567</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 pt-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-white/70 text-sm mb-4 md:mb-0">&copy; 2026 Cognify. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-white/70 hover:text-purple-400 text-sm transition-colors">Privacy
+                            Policy</a>
+                        <a href="#" class="text-white/70 hover:text-purple-400 text-sm transition-colors">Terms of
+                            Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Valid Pyodide CDN -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
