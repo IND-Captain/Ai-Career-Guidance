@@ -498,42 +498,52 @@
             signupSpinner.style.display = 'block';
             signupBtn.disabled = true;
 
-            // Simulate API call / Supabase Signup
+            // Real Supabase Signup
             try {
-                // In a real scenario:
-                // const { data, error } = await supabase.auth.signUp({
-                //    email: signupEmailInput.value,
-                //    password: signupPasswordInput.value,
-                //    options: { data: { full_name: fullNameInput.value } }
-                // });
+                const { data, error } = await supabase.auth.signUp({
+                    email: signupEmailInput.value,
+                    password: signupPasswordInput.value,
+                    options: {
+                        data: {
+                            full_name: fullNameInput.value
+                        }
+                    }
+                });
 
-                // For now, simulate success + Direct Redirect
+                // Reset loading state
+                signupBtnText.style.display = 'block';
+                signupSpinner.style.display = 'none';
+                signupBtn.disabled = false;
+
+                if (error) {
+                    console.error('Signup error:', error);
+                    showSignupError(error.message || 'Failed to create account. Please try again.');
+                    return;
+                }
+
+                console.log('Signup successful:', data);
+
+                // Set logged in state
+                localStorage.setItem('isLoggedIn', 'true');
+                const userProfile = {
+                    name: fullNameInput.value,
+                    email: signupEmailInput.value,
+                    bio: 'New Member',
+                    userId: data.user?.id
+                };
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+                // Show success message
+                showSignupSuccess('Account created successfully! Redirecting to dashboard...');
+
+                // Redirect to dashboard
                 setTimeout(() => {
-                    // Reset loading state
-                    signupBtnText.style.display = 'block';
-                    signupSpinner.style.display = 'none';
-                    signupBtn.disabled = false;
-
-                    // AUTO LOGIN LOGIC (Direct Redirect)
-                    localStorage.setItem('isLoggedIn', 'true');
-                    const userProfile = {
-                        name: fullNameInput.value,
-                        email: signupEmailInput.value,
-                        bio: 'New Member'
-                    };
-                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-
-                    // Show success message
-                    showSignupSuccess('Account created! Logging you in...');
-
-                    // Redirect directly to dashboard
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1000);
+                    window.location.href = 'dashboard.html';
                 }, 1500);
+
             } catch (err) {
-                console.error(err);
-                showSignupError(err.message);
+                console.error('Signup exception:', err);
+                showSignupError(err.message || 'An unexpected error occurred. Please try again.');
                 signupBtnText.style.display = 'block';
                 signupSpinner.style.display = 'none';
                 signupBtn.disabled = false;
@@ -571,35 +581,6 @@
             });
         });
     </script>
-
-    <!-- Footer -->
-    <footer class="glass mt-12">
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                <div>
-                    <img src="logo.png" alt="Cognify Logo" class="h-10 w-auto mx-auto md:mx-0 mb-4"
-                        style="filter: brightness(0) invert(1);">
-                    <p class="text-white/70 text-sm">Your AI-powered career recommendation engine.</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="main.html" class="text-white/70 hover:text-purple-400 transition-colors">Home</a>
-                        </li>
-                        <li><a href="login.html" class="text-white/70 hover:text-purple-400 transition-colors">Login</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Contact</h3>
-                    <p class="text-white/70 text-sm">support@cognify.com</p>
-                </div>
-            </div>
-            <div class="border-t border-white/10 mt-8 pt-6 text-center">
-                <p class="text-white/70 text-sm">&copy; 2026 Cognify. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 </body>
 
 </html>
