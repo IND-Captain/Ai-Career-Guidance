@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendation Engine - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-white bg-gray-900">
+    <!-- Background Video -->
+    <video autoplay muted loop class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -50;">
+        <source src="2.mp4" type="video/mp4">
+    </video>
+
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="logo-container">
+            <div class="logo">CR</div>
+            <h1 class="app-name">Career Recommendation Engine</h1>
+        </div>
+
+        <div class="nav-controls flex items-center gap-4">
+            <a href="dashboard.html" class="hover:text-purple-200 transition text-sm">Dashboard</a>
+            <div class="relative">
+                <button onclick="logout()" class="text-sm hover:text-red-300 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                </button>
+            </div>
+            <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-white/10">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container pt-20 px-4 max-w-4xl mx-auto">
+
+        <div class="page-header mb-8">
+            <h2 class="page-title text-3xl font-bold mb-2">Account Settings</h2>
+            <p class="page-subtitle opacity-70">Manage your profile and preferences.</p>
+        </div>
+
+        <div class="grid gap-8">
+            <!-- Profile Settings -->
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-user-circle mr-3 text-purple-400"></i> Profile Information
+                </h3>
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block mb-2 text-sm">Full Name</label>
+                            <input type="text" id="settingsName"
+                                class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm">Email Address</label>
+                            <input type="email" id="settingsEmail"
+                                class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                placeholder="john@example.com">
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block mb-2 text-sm">Bio / Career Goal</label>
+                        <textarea id="settingsBio" rows="3"
+                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                            placeholder="Tell us about your career aspirations..."></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preferences -->
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-sliders-h mr-3 text-blue-400"></i> Preferences
+                </h3>
+
+                <div class="flex items-center justify-between mb-6 pb-6 border-b border-white/10">
+                    <div>
+                        <h4 class="font-semibold mb-1">Dark Mode</h4>
+                        <p class="text-sm opacity-70">Toggle between light and dark themes.</p>
+                    </div>
+                    <button id="settingsThemeToggle" onclick="toggleTheme()"
+                        class="w-12 h-6 rounded-full bg-white/20 relative transition-colors duration-300">
+                        <div class="w-4 h-4 rounded-full bg-white absolute top-1 left-1 transition-transform duration-300 transform"
+                            id="themeToggleDot"></div>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="font-semibold mb-1">Email Notifications</h4>
+                        <p class="text-sm opacity-70">Receive updates about career matches.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked>
+                        <div
+                            class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="glass-card p-8 rounded-2xl fade-in border border-red-500/30">
+                <h3 class="text-xl font-bold mb-6 flex items-center text-red-400">
+                    <i class="fas fa-exclamation-triangle mr-3"></i> Danger Zone
+                </h3>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="font-semibold mb-1">Delete Account</h4>
+                        <p class="text-sm opacity-70">Permanently remove your account and all data.</p>
+                    </div>
+                    <button onclick="deleteAccount()"
+                        class="px-4 py-2 rounded-lg border border-red-500 text-red-400 hover:bg-red-500/10 transition text-sm font-semibold">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize settings page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            updateThemeToggleUI();
+        });
+
+        // Load profile data
+        function loadProfile() {
+            const user = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            if (user.name) document.getElementById('settingsName').value = user.name;
+            if (user.email) document.getElementById('settingsEmail').value = user.email;
+            if (user.bio) document.getElementById('settingsBio').value = user.bio;
+        }
+
+        // Save profile
+        function saveProfile(e) {
+            e.preventDefault();
+            const user = {
+                name: document.getElementById('settingsName').value,
+                email: document.getElementById('settingsEmail').value,
+                bio: document.getElementById('settingsBio').value
+            };
+            localStorage.setItem('userProfile', JSON.stringify(user));
+            alert('Profile updated successfully!');
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+
+            // Apply theme (this would normally toggle class on body/html)
+            // For now, we update UI state
+            updateThemeToggleUI();
+
+            // In a real app, this would trigger global theme change
+            if (newTheme === 'light') {
+                document.body.classList.remove('bg-gray-900', 'text-white');
+                document.body.classList.add('bg-gray-100', 'text-gray-900');
+            } else {
+                document.body.classList.add('bg-gray-900', 'text-white');
+                document.body.classList.remove('bg-gray-100', 'text-gray-900');
+            }
+        }
+
+        function updateThemeToggleUI() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            const dot = document.getElementById('themeToggleDot');
+            const btn = document.getElementById('settingsThemeToggle');
+
+            if (theme === 'light') {
+                dot.style.transform = 'translateX(100%)';
+                btn.classList.add('bg-purple-600');
+                btn.classList.remove('bg-white/20');
+            } else {
+                dot.style.transform = 'translateX(0)';
+                btn.classList.remove('bg-purple-600');
+                btn.classList.add('bg-white/20');
+            }
+        }
+
+        // Delete Account
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                localStorage.clear();
+                window.location.href = 'main.html';
+            }
+        }
+
+        // Logout function is global in script.js (to be added)
+    </script>
+</body>
+
+</html>

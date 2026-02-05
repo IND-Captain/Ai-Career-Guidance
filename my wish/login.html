@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPath - Career Recommendation Engine | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-white bg-gray-900 flex items-center justify-center min-h-screen">
+    <!-- Background Video -->
+    <video autoplay muted loop class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -50;">
+        <source src="2.mp4" type="video/mp4">
+    </video>
+
+    <!-- Login container -->
+    <div class="glass-card rounded-2xl p-8 w-full max-w-md mx-4">
+        <!-- Login Form Panel -->
+        <div class="form-panel active" id="loginPanel">
+            <!-- Logo and title -->
+            <div class="logo-container">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center mb-4 mx-auto shadow-lg">
+                    <i class="fas fa-rocket text-3xl text-white"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-center mb-1">CareerPath</h1>
+                <p class="text-sm text-center opacity-70 mb-6">Your Career Recommendation Engine</p>
+            </div>
+
+            <!-- Error message -->
+            <div class="bg-red-500/20 border-l-4 border-red-500 p-3 rounded mb-4 hidden" id="loginErrorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="loginErrorText">Invalid email or password</span>
+            </div>
+
+            <!-- Success message -->
+            <div class="bg-green-500/20 border-l-4 border-green-500 p-3 rounded mb-4 hidden" id="loginSuccessMessage">
+                <i class="fas fa-check-circle"></i> <span id="loginSuccessText">Login successful! Redirecting...</span>
+            </div>
+
+            <!-- Login form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail" class="block text-sm font-medium mb-2">Email or Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="loginEmail"
+                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
+                            placeholder="Enter your email or username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword" class="block text-sm font-medium mb-2 mt-4">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="loginPassword"
+                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
+                            placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-4 mb-6 text-sm">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe" class="mr-2">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" class="text-purple-300 hover:text-white transition" id="forgotPassword">Forgot
+                        password?</a>
+                </div>
+
+                <button type="submit" class="w-full btn-primary py-3 rounded-lg font-bold mb-4" id="loginBtn">
+                    <span id="loginBtnText">Sign In</span>
+                    <div class="spinner" id="loginSpinner"></div>
+                </button>
+            </form>
+
+            <button class="w-full btn-glass py-3 rounded-lg font-bold mb-6" id="guestBtn">
+                Continue as Guest
+            </button>
+
+            <div class="text-center text-sm">
+                Don't have an account? <a href="#" id="showSignup"
+                    class="text-purple-300 hover:text-white font-bold">Sign up</a>
+            </div>
+        </div>
+
+        <!-- Sign Up Form Panel -->
+        <div class="form-panel hidden" id="signupPanel">
+            <!-- Logo and title -->
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h1 class="app-title">Join CareerPath</h1>
+                <p class="app-subtitle">Create your account to get started</p>
+            </div>
+
+            <!-- Error message -->
+            <div class="error-message" id="signupErrorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Please fix the errors below</span>
+            </div>
+
+            <!-- Success message -->
+            <div class="success-message" id="signupSuccessMessage">
+                <i class="fas fa-check-circle"></i> <span id="signupSuccessText">Account created successfully!</span>
+            </div>
+
+            <!-- Sign up form -->
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name"
+                            required>
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email"
+                            required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password"
+                            required>
+                        <i class="fas fa-lock"></i>
+                        <span class="password-toggle" id="signupPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-meter"></div>
+                        <div class="strength-meter"></div>
+                        <div class="strength-meter"></div>
+                        <div class="strength-meter"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" class="form-control"
+                            placeholder="Confirm your password" required>
+                        <i class="fas fa-lock"></i>
+                        <span class="password-toggle" id="confirmPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="terms-container">
+                    <input type="checkbox" id="termsCheckbox" required>
+                    <label for="termsCheckbox">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+                            Policy</a></label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="signupBtn">
+                    <span id="signupBtnText">Create Account</span>
+                    <div class="spinner" id="signupSpinner"></div>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <div class="social-login">
+                <div class="social-btn" id="googleSignup">
+                    <i class="fab fa-google"></i>
+                    <span>Sign up with Google</span>
+                </div>
+                <div class="social-btn" id="linkedinSignup">
+                    <i class="fab fa-linkedin"></i>
+                    <span>Sign up with LinkedIn</span>
+                </div>
+            </div>
+
+            <div class="signup-link">
+                Already have an account? <a href="#" id="showLogin">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Voice Control Button -->
+    <button id="globalMicBtn" onclick="toggleVoiceControl()"
+        class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-500 text-white shadow-lg flex items-center justify-center z-50 transition-all">
+        <i class="fas fa-microphone text-xl"></i>
+    </button>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // DOM elements
+        const loginPanel = document.getElementById('loginPanel');
+        const signupPanel = document.getElementById('signupPanel');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+
+        // Login form elements
+        const loginForm = document.getElementById('loginForm');
+        const loginEmailInput = document.getElementById('loginEmail');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginSpinner = document.getElementById('loginSpinner');
+        const loginErrorMessage = document.getElementById('loginErrorMessage');
+        const loginErrorText = document.getElementById('loginErrorText');
+        const loginSuccessMessage = document.getElementById('loginSuccessMessage');
+        const loginSuccessText = document.getElementById('loginSuccessText');
+        const loginPasswordToggle = document.getElementById('loginPasswordToggle');
+        const loginPasswordIcon = loginPasswordToggle.querySelector('i');
+        const forgotPassword = document.getElementById('forgotPassword');
+        const guestBtn = document.getElementById('guestBtn');
+        const googleLogin = document.getElementById('googleLogin');
+        const linkedinLogin = document.getElementById('linkedinLogin');
+
+        // Signup form elements
+        const signupForm = document.getElementById('signupForm');
+        const fullNameInput = document.getElementById('fullName');
+        const signupEmailInput = document.getElementById('signupEmail');
+        const signupPasswordInput = document.getElementById('signupPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const signupBtn = document.getElementById('signupBtn');
+        const signupBtnText = document.getElementById('signupBtnText');
+        const signupSpinner = document.getElementById('signupSpinner');
+        const signupErrorMessage = document.getElementById('signupErrorMessage');
+        const signupErrorText = document.getElementById('signupErrorText');
+        const signupSuccessMessage = document.getElementById('signupSuccessMessage');
+        const signupSuccessText = document.getElementById('signupSuccessText');
+        const signupPasswordToggle = document.getElementById('signupPasswordToggle');
+        const signupPasswordIcon = signupPasswordToggle.querySelector('i');
+        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+        const confirmPasswordIcon = confirmPasswordToggle.querySelector('i');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+        const googleSignup = document.getElementById('googleSignup');
+        const linkedinSignup = document.getElementById('linkedinSignup');
+
+        // Common elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const rememberMe = document.getElementById('rememberMe');
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        // Check for saved email if remember me was checked
+        const savedEmail = localStorage.getItem('savedEmail');
+        if (savedEmail) {
+            loginEmailInput.value = savedEmail;
+            rememberMe.checked = true;
+        }
+
+        // Theme toggle
+        themeToggle.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Panel switching
+        showSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchToSignup();
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchToLogin();
+        });
+
+        function switchToSignup() {
+            loginPanel.classList.remove('active');
+            loginPanel.classList.add('hidden');
+            signupPanel.classList.remove('hidden');
+            signupPanel.classList.add('active');
+        }
+
+        function switchToLogin() {
+            signupPanel.classList.remove('active');
+            signupPanel.classList.add('hidden');
+            loginPanel.classList.remove('hidden');
+            loginPanel.classList.add('active');
+        }
+
+        // Password visibility toggles
+        loginPasswordToggle.addEventListener('click', () => {
+            togglePasswordVisibility(loginPasswordInput, loginPasswordIcon);
+        });
+
+        signupPasswordToggle.addEventListener('click', () => {
+            togglePasswordVisibility(signupPasswordInput, signupPasswordIcon);
+        });
+
+        confirmPasswordToggle.addEventListener('click', () => {
+            togglePasswordVisibility(confirmPasswordInput, confirmPasswordIcon);
+        });
+
+        function togglePasswordVisibility(input, icon) {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+
+            if (type === 'text') {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        signupPasswordInput.addEventListener('input', () => {
+            const password = signupPasswordInput.value;
+            const strength = checkPasswordStrength(password);
+            updatePasswordStrengthUI(strength);
+        });
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+
+            // Length check
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+
+            // Character variety checks
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            return Math.min(strength, 4);
+        }
+
+        function updatePasswordStrengthUI(strength) {
+            const meters = passwordStrength.querySelectorAll('.strength-meter');
+            meters.forEach((meter, index) => {
+                meter.classList.remove('active', 'weak', 'medium', 'strong');
+
+                if (index < strength) {
+                    meter.classList.add('active');
+
+                    if (strength <= 1) {
+                        meter.classList.add('weak');
+                        passwordStrengthText.textContent = 'Weak password';
+                        passwordStrengthText.style.color = 'var(--error-color)';
+                    } else if (strength <= 2) {
+                        meter.classList.add('medium');
+                        passwordStrengthText.textContent = 'Medium strength';
+                        passwordStrengthText.style.color = '#f59e0b';
+                    } else {
+                        meter.classList.add('strong');
+                        passwordStrengthText.textContent = 'Strong password';
+                        passwordStrengthText.style.color = 'var(--success-color)';
+                    }
+                }
+            });
+
+            if (strength === 0) {
+                passwordStrengthText.textContent = 'Password strength';
+                passwordStrengthText.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        // Login form validation
+        function validateLoginForm() {
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value.trim();
+
+            if (!email) {
+                showLoginError('Please enter your email or username');
+                return false;
+            }
+
+            if (!password) {
+                showLoginError('Please enter your password');
+                return false;
+            }
+
+            if (password.length < 6) {
+                showLoginError('Password must be at least 6 characters');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Signup form validation
+        function validateSignupForm() {
+            const fullName = fullNameInput.value.trim();
+            const email = signupEmailInput.value.trim();
+            const password = signupPasswordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+
+            if (!fullName) {
+                showSignupError('Please enter your full name');
+                return false;
+            }
+
+            if (!email) {
+                showSignupError('Please enter your email');
+                return false;
+            }
+
+            if (!validateEmail(email)) {
+                showSignupError('Please enter a valid email address');
+                return false;
+            }
+
+            if (!password) {
+                showSignupError('Please enter a password');
+                return false;
+            }
+
+            if (password.length < 8) {
+                showSignupError('Password must be at least 8 characters');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                showSignupError('Passwords do not match');
+                return false;
+            }
+
+            if (!termsCheckbox.checked) {
+                showSignupError('Please accept the terms and conditions');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Error and success message handlers
+        function showLoginError(message) {
+            loginErrorText.textContent = message;
+            loginErrorMessage.style.display = 'block';
+            loginSuccessMessage.style.display = 'none';
+
+            setTimeout(() => {
+                loginErrorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoginSuccess(message) {
+            loginSuccessText.textContent = message;
+            loginSuccessMessage.style.display = 'block';
+            loginErrorMessage.style.display = 'none';
+        }
+
+        function showSignupError(message) {
+            signupErrorText.textContent = message;
+            signupErrorMessage.style.display = 'block';
+            signupSuccessMessage.style.display = 'none';
+
+            setTimeout(() => {
+                signupErrorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSignupSuccess(message) {
+            signupSuccessText.textContent = message;
+            signupSuccessMessage.style.display = 'block';
+            signupErrorMessage.style.display = 'none';
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validateLoginForm()) {
+                return;
+            }
+
+            // Show loading state
+            loginBtnText.style.display = 'none';
+            loginSpinner.style.display = 'block';
+            loginBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset loading state
+                loginBtnText.style.display = 'block';
+                loginSpinner.style.display = 'none';
+                loginBtn.disabled = false;
+
+                // Save email if remember me is checked
+                if (rememberMe.checked) {
+                    localStorage.setItem('savedEmail', loginEmailInput.value);
+                } else {
+                    localStorage.removeItem('savedEmail');
+                }
+
+                // Save login state
+                localStorage.setItem('isLoggedIn', 'true');
+
+                // Save user profile (simulated)
+                const userProfile = {
+                    name: 'John Doe', // In a real app, this comes from backend
+                    email: loginEmailInput.value,
+                    bio: 'Aspiring professional seeking new opportunities.'
+                };
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+                // Show success message
+                showLoginSuccess('Login successful! Redirecting...');
+
+                // Redirect to main page after a delay
+                setTimeout(() => {
+                    window.location.href = 'main.html';
+                }, 1000);
+            }, 1500);
+        });
+
+        // Signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validateSignupForm()) {
+                return;
+            }
+
+            // Show loading state
+            signupBtnText.style.display = 'none';
+            signupSpinner.style.display = 'block';
+            signupBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset loading state
+                signupBtnText.style.display = 'block';
+                signupSpinner.style.display = 'none';
+                signupBtn.disabled = false;
+
+                // Show success message
+                showSignupSuccess('Account created successfully! Redirecting to login...');
+
+                // Redirect to login after a delay
+                setTimeout(() => {
+                    // Clear form
+                    signupForm.reset();
+                    updatePasswordStrengthUI(0);
+
+                    // Switch to login panel
+                    switchToLogin();
+
+                    // Pre-fill email in login form
+                    loginEmailInput.value = signupEmailInput.value;
+                }, 2000);
+            }, 1500);
+        });
+
+        // Forgot password link
+        forgotPassword.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = loginEmailInput.value.trim();
+
+            if (!email) {
+                showLoginError('Please enter your email address first');
+                return;
+            }
+
+            // In a real application, you would send a password reset email
+            showLoginSuccess(`Password reset link sent to ${email}`);
+        });
+
+        // Guest access
+        guestBtn.addEventListener('click', () => {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'main.html';
+        });
+
+        // Social login handlers
+        googleLogin.addEventListener('click', () => {
+            console.log('Google login clicked');
+            alert('Google login would be initiated here. In a real application, this would redirect to Google OAuth.');
+        });
+
+        linkedinLogin.addEventListener('click', () => {
+            console.log('LinkedIn login clicked');
+            alert('LinkedIn login would be initiated here. In a real application, this would redirect to LinkedIn OAuth.');
+        });
+
+        googleSignup.addEventListener('click', () => {
+            console.log('Google signup clicked');
+            alert('Google signup would be initiated here. In a real application, this would redirect to Google OAuth.');
+        });
+
+        linkedinSignup.addEventListener('click', () => {
+            console.log('LinkedIn signup clicked');
+            alert('LinkedIn signup would be initiated here. In a real application, this would redirect to LinkedIn OAuth.');
+        });
+
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('i').style.color = 'var(--primary-color)';
+            });
+
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('i').style.color = 'var(--text-secondary)';
+            });
+        });
+    </script>
+</body>
+
+</html>

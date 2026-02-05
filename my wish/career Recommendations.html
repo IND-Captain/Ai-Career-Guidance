@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendations - Career Engine Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-bg: #0f172a;
+            --dark-card: rgba(30, 41, 59, 0.7);
+            --dark-text: #e2e8f0;
+            --dark-subtext: #94a3b8;
+            --light-bg: #f8fafc;
+            --light-card: rgba(255, 255, 255, 0.7);
+            --light-text: #1e293b;
+            --light-subtext: #64748b;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Conflict resolution: Use main.html's body style but keep specific overrides if needed */
+        /* Body bg is handled by Tailwind classes and video */
+
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-mode header {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-mode .filter-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .sort-dropdown {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Career Cards Grid */
+        .careers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .career-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .career-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .career-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .career-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .career-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .career-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .career-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .career-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .match-reason {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .match-indicators {
+            margin-bottom: 20px;
+        }
+
+        .match-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .match-indicator i {
+            color: var(--success-color);
+        }
+
+        .career-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5558e3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Alternative Careers Section */
+        .alternative-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-mode .alternative-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alternative-careers {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .alternative-career {
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .alternative-career:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .alternative-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .alternative-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .alternative-match {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Skills to Learn Section */
+        .skills-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-mode .skills-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .skill-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .skill-info {
+            flex: 1;
+        }
+
+        .skill-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 3px;
+        }
+
+        .skill-benefit {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .dark-mode .modal-content {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .roadmap-step {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .roadmap-step::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+
+        .roadmap-step::after {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% + 15px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .roadmap-step:last-child::after {
+            display: none;
+        }
+
+        .roadmap-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .roadmap-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .skill-gap-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .skill-gap-info {
+            flex: 1;
+        }
+
+        .skill-gap-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .skill-gap-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .skill-gap-potential {
+            background: var(--success-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .careers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                gap: 10px;
+            }
+
+            .filter-options {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast-message {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body class="text-white bg-gray-900 dark-mode">
+    <!-- Background Video -->
+    <video autoplay muted loop class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -50;">
+        <source src="2.mp4" type="video/mp4">
+    </video>
+
+    <!-- Floating shapes for background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 200px; height: 200px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 150px; height: 150px; top: 70%; right: 10%; animation-delay: 5s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; bottom: 10%; left: 30%; animation-delay: 10s;"></div>
+        <div class="shape" style="width: 250px; height: 250px; top: 40%; right: 20%; animation-delay: 15s;"></div>
+    </div>
+    <header>
+        <div class="logo">
+            <i class="fas fa-compass"></i>
+            <span>Career Engine</span>
+        </div>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <span>John Doe</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-header">
+                <h2 class="filter-title">Filter & Sort Your Recommendations</h2>
+                <select class="sort-dropdown" id="sortDropdown">
+                    <option value="match">Best Match</option>
+                    <option value="salary">Highest Salary</option>
+                    <option value="growth">Growth Potential</option>
+                    <option value="education">Education Level</option>
+                </select>
+            </div>
+            <div class="filter-options">
+                <div class="filter-chip active" data-filter="all">All Careers</div>
+                <div class="filter-chip" data-filter="tech">Technology</div>
+                <div class="filter-chip" data-filter="science">Science</div>
+                <div class="filter-chip" data-filter="business">Business</div>
+                <div class="filter-chip" data-filter="arts">Arts & Design</div>
+                <div class="filter-chip" data-filter="healthcare">Healthcare</div>
+                <div class="filter-chip" data-filter="education">Education</div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p>Finding the best career matches for you...</p>
+        </div>
+
+        <!-- Career Cards Grid -->
+        <div class="careers-grid" id="careersGrid">
+            <!-- Career cards will be dynamically generated here -->
+        </div>
+
+        <!-- Alternative Careers Section -->
+        <section class="alternative-section">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Alternative Career Paths
+            </h2>
+            <div class="alternative-careers" id="alternativeCareers">
+                <!-- Alternative careers will be dynamically generated here -->
+            </div>
+        </section>
+
+        <!-- Skills to Learn Section -->
+        <section class="skills-section">
+            <h2 class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                Skills to Increase Your Earning Potential
+            </h2>
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Skills will be dynamically generated here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Roadmap Modal -->
+    <div class="modal" id="roadmapModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="roadmapTitle">Career Roadmap</h2>
+                <button class="modal-close" id="closeRoadmapModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="roadmapContent">
+                <!-- Roadmap steps will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Gap Modal -->
+    <div class="modal" id="skillGapModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="skillGapTitle">Skill Gap Analysis</h2>
+                <button class="modal-close" id="closeSkillGapModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="skillGapContent">
+                <!-- Skill gap items will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <div class="toast-message" id="toastMessage">Action completed successfully!</div>
+    </div>
+
+    <script>
+        // Sample data for careers
+        const careersData = [
+            {
+                id: 1,
+                name: "Full Stack Developer",
+                icon: "fa-code",
+                category: "tech",
+                description: "Build end-to-end web applications, from user interfaces to server-side logic and databases.",
+                matchReason: "Matches your coding skills in JavaScript and Python, and your interest in problem-solving.",
+                skills: ["JavaScript", "Python", "Problem Solving", "Database Management"],
+                interests: ["Technology", "Problem Solving", "Creativity"],
+                matchPercentage: 92
+            },
+            {
+                id: 2,
+                name: "Data Scientist",
+                icon: "fa-chart-line",
+                category: "tech",
+                description: "Analyze complex data to help companies make better business decisions.",
+                matchReason: "Aligns with your mathematics background and analytical thinking skills.",
+                skills: ["Statistics", "Python", "Machine Learning", "Data Visualization"],
+                interests: ["Mathematics", "Analysis", "Problem Solving"],
+                matchPercentage: 88
+            },
+            {
+                id: 3,
+                name: "UX Designer",
+                icon: "fa-palette",
+                category: "arts",
+                description: "Create intuitive and engaging user experiences for digital products.",
+                matchReason: "Combines your creative skills with your interest in technology and user psychology.",
+                skills: ["Design Principles", "User Research", "Prototyping", "Figma"],
+                interests: ["Design", "Psychology", "Technology"],
+                matchPercentage: 85
+            },
+            {
+                id: 4,
+                name: "Product Manager",
+                icon: "fa-tasks",
+                category: "business",
+                description: "Guide product development from concept to launch, balancing business needs with user requirements.",
+                matchReason: "Leverages your leadership skills and understanding of both technology and business.",
+                skills: ["Project Management", "Communication", "Market Analysis", "Strategic Thinking"],
+                interests: ["Leadership", "Technology", "Business Strategy"],
+                matchPercentage: 82
+            },
+            {
+                id: 5,
+                name: "Biomedical Engineer",
+                icon: "fa-dna",
+                category: "science",
+                description: "Apply engineering principles to medical and biological problems.",
+                matchReason: "Perfect for your biology background and engineering skills.",
+                skills: ["Biology", "Engineering Principles", "Problem Solving", "Research"],
+                interests: ["Science", "Healthcare", "Innovation"],
+                matchPercentage: 90
+            },
+            {
+                id: 6,
+                name: "Financial Analyst",
+                icon: "fa-chart-pie",
+                category: "business",
+                description: "Evaluate financial data to help businesses make investment decisions.",
+                matchReason: "Utilizes your mathematics skills and interest in business analytics.",
+                skills: ["Financial Modeling", "Excel", "Data Analysis", "Critical Thinking"],
+                interests: ["Finance", "Mathematics", "Business Strategy"],
+                matchPercentage: 78
+            },
+            {
+                id: 7,
+                name: "Digital Marketing Specialist",
+                icon: "fa-bullhorn",
+                category: "business",
+                description: "Create and execute marketing campaigns across digital channels.",
+                matchReason: "Combines your creativity with analytical skills and interest in consumer behavior.",
+                skills: ["SEO/SEM", "Content Creation", "Analytics", "Social Media"],
+                interests: ["Marketing", "Creativity", "Data Analysis"],
+                matchPercentage: 75
+            },
+            {
+                id: 8,
+                name: "AI Researcher",
+                icon: "fa-robot",
+                category: "tech",
+                description: "Develop new artificial intelligence algorithms and applications.",
+                matchReason: "Leverages your programming skills and interest in cutting-edge technology.",
+                skills: ["Machine Learning", "Python", "Research Methods", "Mathematics"],
+                interests: ["Technology", "Research", "Innovation"],
+                matchPercentage: 87
+            },
+            {
+                id: 9,
+                name: "Clinical Psychologist",
+                icon: "fa-brain",
+                category: "healthcare",
+                description: "Diagnose and treat mental, emotional, and behavioral disorders.",
+                matchReason: "Aligns with your psychology background and desire to help others.",
+                skills: ["Psychology", "Empathy", "Communication", "Analysis"],
+                interests: ["Psychology", "Healthcare", "Helping Others"],
+                matchPercentage: 83
+            },
+            {
+                id: 10,
+                name: "Environmental Scientist",
+                icon: "fa-leaf",
+                category: "science",
+                description: "Study the environment and develop solutions to environmental problems.",
+                matchReason: "Combines your science background with your passion for sustainability.",
+                skills: ["Environmental Science", "Research", "Data Analysis", "Problem Solving"],
+                interests: ["Environment", "Science", "Sustainability"],
+                matchPercentage: 80
+            },
+            {
+                id: 11,
+                name: "Cybersecurity Analyst",
+                icon: "fa-shield-alt",
+                category: "tech",
+                description: "Protect computer systems and networks from cyber threats.",
+                matchReason: "Utilizes your technical skills and interest in problem-solving and security.",
+                skills: ["Network Security", "Risk Assessment", "Problem Solving", "Attention to Detail"],
+                interests: ["Security", "Technology", "Problem Solving"],
+                matchPercentage: 86
+            },
+            {
+                id: 12,
+                name: "Architect",
+                icon: "fa-building",
+                category: "arts",
+                description: "Design buildings and other physical structures.",
+                matchReason: "Combines your creative skills with your understanding of mathematics and engineering.",
+                skills: ["Design", "Mathematics", "Project Management", "Technical Drawing"],
+                interests: ["Design", "Architecture", "Creativity"],
+                matchPercentage: 77
+            }
+        ];
+
+        // Alternative careers data
+        const alternativeCareersData = [
+            { name: "DevOps Engineer", icon: "fa-server", match: "78%" },
+            { name: "Blockchain Developer", icon: "fa-link", match: "75%" },
+            { name: "Game Developer", icon: "fa-gamepad", match: "72%" },
+            { name: "Cloud Architect", icon: "fa-cloud", match: "80%" },
+            { name: "AR/VR Developer", icon: "fa-vr-cardboard", match: "70%" },
+            { name: "IT Consultant", icon: "fa-laptop-code", match: "73%" }
+        ];
+
+        // Skills to learn data
+        const skillsToLearnData = [
+            { name: "Cloud Computing", icon: "fa-cloud", benefit: "+$15,000 potential salary" },
+            { name: "Machine Learning", icon: "fa-brain", benefit: "+$20,000 potential salary" },
+            { name: "Project Management", icon: "fa-project-diagram", benefit: "+$12,000 potential salary" },
+            { name: "Data Visualization", icon: "fa-chart-bar", benefit: "+$10,000 potential salary" },
+            { name: "Cybersecurity", icon: "fa-lock", benefit: "+$18,000 potential salary" },
+            { name: "UX/UI Design", icon: "fa-pencil-ruler", benefit: "+$13,000 potential salary" }
+        ];
+
+        // Roadmap data
+        const roadmapData = {
+            "Full Stack Developer": [
+                { title: "Build Foundation", description: "Learn HTML, CSS, and JavaScript fundamentals. Create simple static websites." },
+                { title: "Master Frontend", description: "Learn a modern frontend framework like React or Vue. Build interactive web applications." },
+                { title: "Learn Backend", description: "Master a backend language like Node.js, Python, or Java. Learn to build APIs." },
+                { title: "Database Skills", description: "Learn SQL and NoSQL databases. Understand data modeling and management." },
+                { title: "Full Stack Projects", description: "Build complete web applications that integrate frontend, backend, and database." },
+                { title: "DevOps & Deployment", description: "Learn version control, CI/CD, and cloud deployment platforms." },
+                { title: "Specialize", description: "Choose a specialization like mobile development, performance optimization, or a specific industry." }
+            ],
+            "Data Scientist": [
+                { title: "Mathematics Foundation", description: "Strengthen your knowledge of statistics, linear algebra, and calculus." },
+                { title: "Programming Skills", description: "Master Python and libraries like NumPy, Pandas, and Matplotlib." },
+                { title: "Machine Learning Basics", description: "Learn fundamental ML algorithms and when to apply them." },
+                { title: "Data Wrangling", description: "Master techniques for cleaning, transforming, and preparing data for analysis." },
+                { title: "Advanced ML", description: "Explore deep learning, natural language processing, or computer vision." },
+                { title: "Domain Knowledge", description: "Develop expertise in a specific industry like finance, healthcare, or marketing." },
+                { title: "Communication Skills", description: "Learn to present data insights effectively to non-technical stakeholders." }
+            ]
+        };
+
+        // Skill gap data
+        const skillGapData = {
+            "Full Stack Developer": [
+                { name: "Cloud Services (AWS/Azure)", description: "Deploying and managing applications in the cloud", potential: "+$15,000" },
+                { name: "GraphQL", description: "Modern API query language that can replace REST", potential: "+$8,000" },
+                { name: "Microservices Architecture", description: "Designing scalable distributed systems", potential: "+$12,000" },
+                { name: "Progressive Web Apps", description: "Building app-like experiences on the web", potential: "+$7,000" }
+            ],
+            "Data Scientist": [
+                { name: "Deep Learning Frameworks", description: "TensorFlow and PyTorch for advanced ML", potential: "+$20,000" },
+                { name: "Big Data Technologies", description: "Spark, Hadoop, and distributed computing", potential: "+$15,000" },
+                { name: "MLOps", description: "Deploying and maintaining ML models in production", potential: "+$18,000" },
+                { name: "Domain-Specific Knowledge", description: "Finance, healthcare, or other industry expertise", potential: "+$10,000" }
+            ]
+        };
+
+        // DOM elements
+        const careersGrid = document.getElementById('careersGrid');
+        const alternativeCareers = document.getElementById('alternativeCareers');
+        const skillsGrid = document.getElementById('skillsGrid');
+        const roadmapModal = document.getElementById('roadmapModal');
+        const skillGapModal = document.getElementById('skillGapModal');
+        const roadmapContent = document.getElementById('roadmapContent');
+        const skillGapContent = document.getElementById('skillGapContent');
+        const roadmapTitle = document.getElementById('roadmapTitle');
+        const skillGapTitle = document.getElementById('skillGapTitle');
+        const loadingState = document.getElementById('loadingState');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const themeToggle = document.getElementById('themeToggle');
+        const sortDropdown = document.getElementById('sortDropdown');
+
+        // Initialize the page
+        function init() {
+            renderCareers(careersData);
+            renderAlternativeCareers();
+            renderSkillsToLearn();
+            setupEventListeners();
+
+            // Simulate loading
+            setTimeout(() => {
+                loadingState.classList.remove('active');
+            }, 1000);
+        }
+
+        // Render career cards
+        function renderCareers(careers) {
+            careersGrid.innerHTML = '';
+
+            careers.forEach(career => {
+                const card = document.createElement('div');
+                card.className = 'career-card';
+                card.dataset.category = career.category;
+
+                const skillsHtml = career.skills.map(skill =>
+                    `<div class="match-indicator">
+                        <i class="fas fa-check-circle"></i>
+                        <span>${skill}</span>
+                    </div>`
+                ).join('');
+
+                const interestsHtml = career.interests.map(interest =>
+                    `<div class="match-indicator">
+                        <i class="fas fa-check-circle"></i>
+                        <span>${interest}</span>
+                    </div>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="career-header">
+                        <div class="career-icon">
+                            <i class="fas ${career.icon}"></i>
+                        </div>
+                        <h3 class="career-title">${career.name}</h3>
+                    </div>
+                    <p class="career-description">${career.description}</p>
+                    <div class="match-reason">
+                        <strong>Why it matches:</strong> ${career.matchReason}
+                    </div>
+                    <div class="match-indicators">
+                        <h4 style="color: white; margin-bottom: 8px; font-size: 14px;">Matching Skills</h4>
+                        ${skillsHtml}
+                        <h4 style="color: white; margin: 8px 0; font-size: 14px;">Matching Interests</h4>
+                        ${interestsHtml}
+                    </div>
+                    <div class="career-actions">
+                        <button class="btn btn-primary view-roadmap" data-career="${career.name}">
+                            View Roadmap
+                        </button>
+                        <button class="btn btn-secondary see-skill-gap" data-career="${career.name}">
+                            See Skill Gap
+                        </button>
+                    </div>
+                `;
+
+                careersGrid.appendChild(card);
+            });
+
+            // Add event listeners to new buttons
+            document.querySelectorAll('.view-roadmap').forEach(button => {
+                button.addEventListener('click', function () {
+                    const careerName = this.dataset.career;
+                    showRoadmap(careerName);
+                });
+            });
+
+            document.querySelectorAll('.see-skill-gap').forEach(button => {
+                button.addEventListener('click', function () {
+                    const careerName = this.dataset.career;
+                    showSkillGap(careerName);
+                });
+            });
+        }
+
+        // Render alternative careers
+        function renderAlternativeCareers() {
+            alternativeCareers.innerHTML = '';
+
+            alternativeCareersData.forEach(career => {
+                const careerElement = document.createElement('div');
+                careerElement.className = 'alternative-career';
+                careerElement.innerHTML = `
+                    <div class="alternative-icon">
+                        <i class="fas ${career.icon}"></i>
+                    </div>
+                    <h3 class="alternative-title">${career.name}</h3>
+                    <p class="alternative-match">${career.match} match</p>
+                `;
+
+                careerElement.addEventListener('click', () => {
+                    showToast(`Exploring ${career.name} career path`);
+                });
+
+                alternativeCareers.appendChild(careerElement);
+            });
+        }
+
+        // Render skills to learn
+        function renderSkillsToLearn() {
+            skillsGrid.innerHTML = '';
+
+            skillsToLearnData.forEach(skill => {
+                const skillElement = document.createElement('div');
+                skillElement.className = 'skill-card';
+                skillElement.innerHTML = `
+                    <div class="skill-icon">
+                        <i class="fas ${skill.icon}"></i>
+                    </div>
+                    <div class="skill-info">
+                        <h3 class="skill-name">${skill.name}</h3>
+                        <p class="skill-benefit">${skill.benefit}</p>
+                    </div>
+                `;
+
+                skillElement.addEventListener('click', () => {
+                    showToast(`Adding ${skill.name} to your learning plan`);
+                });
+
+                skillsGrid.appendChild(skillElement);
+            });
+        }
+
+        // Show roadmap modal
+        function showRoadmap(careerName) {
+            roadmapTitle.textContent = `${careerName} Roadmap`;
+            roadmapContent.innerHTML = '';
+
+            // Get roadmap data or use default
+            const roadmap = roadmapData[careerName] || [
+                { title: "Research the Field", description: "Learn about the industry, required skills, and career prospects." },
+                { title: "Build Foundational Skills", description: "Take courses and gain knowledge in core areas." },
+                { title: "Gain Practical Experience", description: "Work on projects, internships, or entry-level positions." },
+                { title: "Network and Build Connections", description: "Connect with professionals in the field." },
+                { title: "Specialize and Advance", description: "Develop expertise in a specific area and seek advancement." }
+            ];
+
+            roadmap.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'roadmap-step';
+                stepElement.innerHTML = `
+                    <h3 class="roadmap-title">Step ${index + 1}: ${step.title}</h3>
+                    <p class="roadmap-description">${step.description}</p>
+                `;
+                roadmapContent.appendChild(stepElement);
+            });
+
+            roadmapModal.classList.add('active');
+        }
+
+        // Show skill gap modal
+        function showSkillGap(careerName) {
+            skillGapTitle.textContent = `${careerName} - Skill Gap Analysis`;
+            skillGapContent.innerHTML = '';
+
+            // Get skill gap data or use default
+            const skillGaps = skillGapData[careerName] || [
+                { name: "Industry Certification", description: "Professional certification in your field", potential: "+$10,000" },
+                { name: "Advanced Technical Skills", description: "Specialized technical knowledge", potential: "+$15,000" },
+                { name: "Soft Skills Development", description: "Communication, leadership, and teamwork", potential: "+$8,000" },
+                { name: "Networking", description: "Building professional connections", potential: "+$5,000" }
+            ];
+
+            skillGaps.forEach(gap => {
+                const gapElement = document.createElement('div');
+                gapElement.className = 'skill-gap-item';
+                gapElement.innerHTML = `
+                    <div class="skill-gap-info">
+                        <h3 class="skill-gap-name">${gap.name}</h3>
+                        <p class="skill-gap-description">${gap.description}</p>
+                    </div>
+                    <div class="skill-gap-potential">${gap.potential}</div>
+                `;
+                skillGapContent.appendChild(gapElement);
+            });
+
+            skillGapModal.classList.add('active');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Close modal buttons
+            document.getElementById('closeRoadmapModal').addEventListener('click', () => {
+                roadmapModal.classList.remove('active');
+            });
+
+            document.getElementById('closeSkillGapModal').addEventListener('click', () => {
+                skillGapModal.classList.remove('active');
+            });
+
+            // Close modal when clicking outside
+            roadmapModal.addEventListener('click', (e) => {
+                if (e.target === roadmapModal) {
+                    roadmapModal.classList.remove('active');
+                }
+            });
+
+            skillGapModal.addEventListener('click', (e) => {
+                if (e.target === skillGapModal) {
+                    skillGapModal.classList.remove('active');
+                }
+            });
+
+            // Theme toggle
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const icon = themeToggle.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+                showToast(`Switched to ${document.body.classList.contains('dark-mode') ? 'dark' : 'light'} mode`);
+            });
+
+            // Filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.dataset.filter;
+                    if (filter === 'all') {
+                        renderCareers(careersData);
+                    } else {
+                        const filtered = careersData.filter(career => career.category === filter);
+                        renderCareers(filtered);
+                    }
+
+                    showToast(`Showing ${this.textContent} careers`);
+                });
+            });
+
+            // Sort dropdown
+            sortDropdown.addEventListener('change', function () {
+                const sortBy = this.value;
+                let sorted = [...careersData];
+
+                switch (sortBy) {
+                    case 'match':
+                        sorted.sort((a, b) => b.matchPercentage - a.matchPercentage);
+                        break;
+                    case 'salary':
+                        // In a real app, this would sort by actual salary data
+                        sorted.sort((a, b) => Math.random() - 0.5);
+                        break;
+                    case 'growth':
+                        // In a real app, this would sort by growth potential data
+                        sorted.sort((a, b) => Math.random() - 0.5);
+                        break;
+                    case 'education':
+                        // In a real app, this would sort by education level
+                        sorted.sort((a, b) => Math.random() - 0.5);
+                        break;
+                }
+
+                renderCareers(sorted);
+                showToast(`Sorted by ${this.options[this.selectedIndex].text}`);
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

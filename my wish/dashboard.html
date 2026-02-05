@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendation Engine - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-white bg-gray-900">
+    <!-- Background Video -->
+    <video autoplay muted loop class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -50;">
+        <source src="2.mp4" type="video/mp4">
+    </video>
+
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <div class="logo-container">
+            <div class="logo">CR</div>
+            <h1 class="app-name">Career Recommendation Engine</h1>
+        </div>
+
+        <div class="nav-controls flex items-center gap-4">
+            <div class="relative">
+                <select id="languageSelect" onchange="changeLanguage(this.value)"
+                    class="bg-white/10 border border-white/20 rounded px-3 py-1.5 text-sm focus:outline-none text-white">
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Telugu">Telugu</option>
+                </select>
+            </div>
+
+            <button
+                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="#" class="menu-link active" onclick="showDashboardSection('dashboard-home')">
+                        <i class="fas fa-home menu-icon"></i>
+                        <span>Dashboard Overview</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="showDashboardSection('assessment-section')">
+                        <i class="fas fa-clipboard-list menu-icon"></i>
+                        <span>Career Assessment</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="showDashboardSection('ai-assistant-section')">
+                        <i class="fas fa-robot menu-icon"></i>
+                        <span>Resume AI Chatbot</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="showDashboardSection('compiler-section')">
+                        <i class="fas fa-code menu-icon"></i>
+                        <span>Code Playground</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="showDashboardSection('roadmap-section')">
+                        <i class="fas fa-map-signs menu-icon"></i>
+                        <span>Career Roadmap</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="main.html" class="menu-link">
+                        <i class="fas fa-sign-out-alt menu-icon"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Dashboard Home Section -->
+            <div id="dashboard-home" class="fade-in">
+                <div class="page-header">
+                    <h2 class="page-title">Dashboard Overview</h2>
+                    <p class="page-subtitle">Welcome back! Here's your career development progress.</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Start Career Assessment Card -->
+                    <div class="glass-card" onclick="showDashboardSection('assessment-section')">
+                        <div class="card-icon assessment">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3 class="card-title">Start Career Assessment</h3>
+                        <p class="card-description">Discover your perfect career match by taking our comprehensive
+                            assessment.</p>
+                        <span class="card-action">Start Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+
+                    <!-- Ask Resume AI Card -->
+                    <div class="glass-card" onclick="showDashboardSection('ai-assistant-section')">
+                        <div class="card-icon resume">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="card-title">Ask Resume AI</h3>
+                        <p class="card-description">Get instant AI-powered feedback on your resume and career questions.
+                        </p>
+                        <span class="card-action">Chat with AI <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment Section -->
+            <div id="assessment-section" class="hidden fade-in">
+                <div class="glass-card rounded-2xl p-4 md:p-6 max-w-xl mx-auto w-full">
+                    <!-- Progress Bar -->
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm">Step <span id="currentStep">1</span> of 4</span>
+                            <span class="text-sm"><span id="progressPercent">25</span>% Complete</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step Indicators -->
+                    <div class="flex justify-center mb-6 space-x-3">
+                        <div class="step-indicator active w-3 h-3 rounded-full bg-white opacity-50" data-step="1"></div>
+                        <div class="step-indicator w-3 h-3 rounded-full bg-white opacity-50" data-step="2"></div>
+                        <div class="step-indicator w-3 h-3 rounded-full bg-white opacity-50" data-step="3"></div>
+                        <div class="step-indicator w-3 h-3 rounded-full bg-white opacity-50" data-step="4"></div>
+                    </div>
+
+                    <!-- Step 1: Personal Information -->
+                    <div id="step1" class="step-content">
+                        <h2 class="text-lg font-bold mb-5">Tell us about yourself</h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="text-left">
+                                <label class="block mb-2 text-sm">First Name</label>
+                                <input type="text"
+                                    class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                    placeholder="John">
+                            </div>
+                            <div class="text-left">
+                                <label class="block mb-2 text-sm">Last Name</label>
+                                <input type="text"
+                                    class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                    placeholder="Doe">
+                            </div>
+                            <div class="text-left">
+                                <label class="block mb-2 text-sm">Email</label>
+                                <input type="email"
+                                    class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                    placeholder="john@example.com">
+                            </div>
+                            <div class="text-left">
+                                <label class="block mb-2 text-sm">Age</label>
+                                <input type="number"
+                                    class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
+                                    placeholder="25">
+                            </div>
+                        </div>
+                        <div class="text-left mt-5">
+                            <label class="block mb-2 text-sm">Education Level</label>
+                            <select
+                                class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm">
+                                <option>High School</option>
+                                <option>Some College</option>
+                                <option>Bachelor's Degree</option>
+                                <option>Master's Degree</option>
+                                <option>PhD</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Skills -->
+                    <div id="step2" class="step-content hidden">
+                        <h2 class="text-lg font-bold mb-5">Select your skills</h2>
+                        <p class="mb-5 opacity-80 text-sm">Choose all that apply to you</p>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Programming">Programming</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Design">Design</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Communication">Communication</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Leadership">Leadership</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Analytics">Analytics</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Writing">Writing</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs" data-skill="Sales">Sales</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Marketing">Marketing</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Research">Research</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Teaching">Teaching</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs"
+                                data-skill="Project Management">Project Management</button>
+                            <button class="skill-tag px-2.5 py-1 rounded-full text-xs" data-skill="Data Science">Data
+                                Science</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Interests -->
+                    <div id="step3" class="step-content hidden">
+                        <h2 class="text-lg font-bold mb-5">What interests you?</h2>
+                        <p class="mb-5 opacity-80 text-sm">Select your areas of interest</p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Technology">
+                                <span>Technology & Innovation</span>
+                            </label>
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Healthcare">
+                                <span>Healthcare & Medicine</span>
+                            </label>
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Business">
+                                <span>Business & Finance</span>
+                            </label>
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Education">
+                                <span>Education & Training</span>
+                            </label>
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Creative">
+                                <span>Creative Arts & Design</span>
+                            </label>
+                            <label
+                                class="flex items-center p-2.5 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition text-sm">
+                                <input type="checkbox" class="mr-3 w-5 h-5" value="Environment">
+                                <span>Environment & Sustainability</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Work Preferences -->
+                    <div id="step4" class="step-content hidden">
+                        <h2 class="text-lg font-bold mb-5">Work preferences</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block mb-3 text-sm">Preferred Work Environment</label>
+                                <div class="grid md:grid-cols-3 gap-3">
+                                    <label
+                                        class="flex items-center p-2 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition">
+                                        <input type="radio" name="environment" class="mr-3" value="office">
+                                        <span>Office</span>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-2 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition">
+                                        <input type="radio" name="environment" class="mr-3" value="remote">
+                                        <span>Remote</span>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-2 rounded-lg glass-dark cursor-pointer hover:bg-white/10 transition">
+                                        <input type="radio" name="environment" class="mr-3" value="hybrid">
+                                        <span>Hybrid</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-3 text-sm">Work-Life Balance Priority</label>
+                                <div class="flex items-center space-x-4">
+                                    <span>Low</span>
+                                    <input type="range" min="1" max="5" value="3" class="flex-1">
+                                    <span>High</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-3 text-sm">Salary Expectation</label>
+                                <select
+                                    class="w-full px-2.5 py-1.5 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm">
+                                    <option>$30,000 - $50,000</option>
+                                    <option>$50,000 - $75,000</option>
+                                    <option>$75,000 - $100,000</option>
+                                    <option>$100,000 - $150,000</option>
+                                    <option>$150,000+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <button id="prevBtn" onclick="changeStep(-1)"
+                            class="btn-glass px-4 py-2 rounded-full font-semibold hidden text-sm">
+                            <i class="fas fa-arrow-left mr-2"></i> Previous
+                        </button>
+                        <button id="nextBtn" onclick="changeStep(1)"
+                            class="btn-primary px-4 py-2 rounded-full font-semibold ml-auto text-sm">
+                            Next <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                        <button id="submitBtn" onclick="submitAssessment()"
+                            class="btn-primary px-4 py-2 rounded-full font-semibold ml-auto hidden text-sm">
+                            Get Recommendations <i class="fas fa-magic ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Section -->
+            <div id="ai-assistant-section" class="hidden fade-in h-full">
+                <div class="flex flex-col lg:flex-row gap-6 h-[600px]">
+                    <!-- 3D Bot -->
+                    <div class="w-full lg:w-1/2 h-full glass-card rounded-2xl overflow-hidden relative shadow-2xl">
+                        <iframe src='https://my.spline.design/nexbotrobotcharacterconcept-Q620C5zdED1vu7AtoC0Gw4Bo/'
+                            frameborder='0' width='100%' height='100%' style="transform: scale(1.2);"></iframe>
+                    </div>
+                    <!-- Chat Interface -->
+                    <div class="w-full lg:w-1/2 h-full glass-card rounded-2xl p-6 flex flex-col shadow-2xl">
+                        <div class="flex items-center mb-4 border-b border-white/10 pb-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center mr-3">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Nex AI Assistant</h3>
+                                <p class="text-xs opacity-70">Powered by OpenRouter</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto space-y-4 mb-4 pr-2" id="chatMessages">
+                            <div class="flex">
+                                <div class="glass p-4 rounded-lg max-w-[90%]">
+                                    <p class="text-sm">Hello! I'm Nex. I can help you with resume tips, career advice,
+                                        or interview prep. Ask me anything!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white/5 rounded-xl p-2 border border-white/10">
+                            <button onclick="toggleVoiceControl()"
+                                class="mr-2 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
+                                <i class="fas fa-microphone text-xs"></i>
+                            </button>
+                            <input id="chatInput" type="text" placeholder="Ask me anything..."
+                                class="flex-1 bg-transparent px-4 py-2 focus:outline-none text-sm text-white placeholder-white/50"
+                                onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button onclick="sendMessage()"
+                                class="ml-2 w-10 h-10 rounded-lg bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center hover:opacity-90 transition shadow-lg">
+                                <i class="fas fa-paper-plane text-white text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compiler Section -->
+            <div id="compiler-section" class="hidden fade-in h-full flex flex-col">
+                <div class="glass-card rounded-2xl p-6 h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-xl font-bold">Code Playground</h2>
+                            <select id="languageSelector"
+                                class="bg-white/10 border border-white/20 rounded px-3 py-1 text-sm focus:outline-none text-white">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                            </select>
+                        </div>
+                        <button onclick="runCode()"
+                            class="btn-primary px-6 py-2 rounded-lg font-semibold flex items-center gap-2">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                    </div>
+
+                    <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-0">
+                        <!-- Editor -->
+                        <div class="flex flex-col bg-[#1e1e1e] rounded-xl overflow-hidden border border-white/10">
+                            <div class="bg-white/5 px-4 py-2 text-xs font-mono text-white/50 border-b border-white/5">
+                                Input</div>
+                            <div id="editor" class="flex-1 text-sm"></div>
+                        </div>
+
+                        <!-- Output -->
+                        <div class="flex flex-col bg-[#1e1e1e] rounded-xl overflow-hidden border border-white/10">
+                            <div class="bg-white/5 px-4 py-2 text-xs font-mono text-white/50 border-b border-white/5">
+                                Output</div>
+                            <div id="output"
+                                class="flex-1 p-4 font-mono text-sm text-green-400 whitespace-pre-wrap overflow-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Valid Pyodide CDN -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <!-- CodeMirror CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+
+    <script src="compiler.js"></script>
+
+    <!-- Global Voice Control Button -->
+    <button id="globalMicBtn" onclick="toggleVoiceControl()"
+        class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-500 text-white shadow-lg flex items-center justify-center z-50 transition-all md:hidden">
+        <i class="fas fa-microphone text-xl"></i>
+    </button>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

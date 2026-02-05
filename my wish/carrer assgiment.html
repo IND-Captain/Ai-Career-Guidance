@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendation Engine - User Input</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --border-color: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-color: rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --border-color: #374151;
+            --glass-bg: rgba(17, 24, 39, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: var(--transition);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background animation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://picsum.photos/seed/career/1920/1080.jpg') center/cover no-repeat;
+            opacity: 0.2;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Dashboard Navigation */
+        .dashboard-nav {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-steps {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 33.33%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .help-icon {
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .help-icon:hover {
+            color: var(--primary-color);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 10;
+            width: max-content;
+            max-width: 250px;
+            white-space: normal;
+        }
+
+        .help-icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 10px);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-group.error .form-control {
+            border-color: var(--error-color);
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Checkbox Groups */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkbox-item:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-item .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked ~ .checkmark {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked ~ .checkmark::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        .checkbox-item:hover .checkmark {
+            border-color: white;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: var(--success-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-primary.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-primary.loading .btn-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-brand">
+            <i class="fas fa-rocket"></i>
+            <span>CareerPath</span>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link active">User Input</a>
+            <a href="#" class="nav-link">Recommendations</a>
+            <a href="#" class="nav-link">Profile</a>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <h3 class="progress-title">Your Career Journey</h3>
+                <span class="progress-steps">Step 1 of 3</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <div class="form-header">
+                <h1 class="form-title">Tell Us About Yourself</h1>
+                <p class="form-subtitle">This information helps us provide personalized career recommendations</p>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <span>Your information has been saved successfully!</span>
+            </div>
+
+            <form id="userInputForm">
+                <!-- Education Level Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Education Level</h2>
+                        <div class="help-icon">
+                            <i class="fas fa-question-circle"></i>
+                            <div class="tooltip">Select your highest completed education level</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="educationLevel" required>
+                            <option value="" disabled selected>Select your education level</option>
+                            <option value="10th">10th Grade</option>
+                            <option value="12th">12th Grade</option>
+                            <option value="diploma">Diploma</option>
+                            <option value="undergraduate">Undergraduate</option>
+                            <option value="postgraduate">Postgraduate</option>
+                        </select>
+                        <div class="error-message">Please select your education level</div>
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Interests</h2>
+                        <div class="help-icon">
+                            <i class="fas fa-question-circle"></i>
+                            <div class="tooltip">Select all areas that interest you (select at least 3)</div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="interestsGroup">
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="technology">
+                                <span class="checkmark"></span>
+                                <span>Technology</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="science">
+                                <span class="checkmark"></span>
+                                <span>Science</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="mathematics">
+                                <span class="checkmark"></span>
+                                <span>Mathematics</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="business">
+                                <span class="checkmark"></span>
+                                <span>Business</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="arts">
+                                <span class="checkmark"></span>
+                                <span>Arts</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="healthcare">
+                                <span class="checkmark"></span>
+                                <span>Healthcare</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="government">
+                                <span class="checkmark"></span>
+                                <span>Government</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="education">
+                                <span class="checkmark"></span>
+                                <span>Education</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="environment">
+                                <span class="checkmark"></span>
+                                <span>Environment</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="sports">
+                                <span class="checkmark"></span>
+                                <span>Sports</span>
+                            </label>
+                        </div>
+                        <div class="error-message">Please select at least 3 interests</div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Skills</h2>
+                        <div class="help-icon">
+                            <i class="fas fa-question-circle"></i>
+                            <div class="tooltip">Select all skills you possess (select at least 3)</div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="skillsGroup">
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="programming">
+                                <span class="checkmark"></span>
+                                <span>Programming</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="communication">
+                                <span class="checkmark"></span>
+                                <span>Communication</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="data-analysis">
+                                <span class="checkmark"></span>
+                                <span>Data Analysis</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="problem-solving">
+                                <span class="checkmark"></span>
+                                <span>Problem Solving</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="design">
+                                <span class="checkmark"></span>
+                                <span>Design</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="research">
+                                <span class="checkmark"></span>
+                                <span>Research</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="leadership">
+                                <span class="checkmark"></span>
+                                <span>Leadership</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="project-management">
+                                <span class="checkmark"></span>
+                                <span>Project Management</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="writing">
+                                <span class="checkmark"></span>
+                                <span>Writing</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="skills" value="public-speaking">
+                                <span class="checkmark"></span>
+                                <span>Public Speaking</span>
+                            </label>
+                        </div>
+                        <div class="error-message">Please select at least 3 skills</div>
+                    </div>
+                </div>
+
+                <!-- Preferred Industry Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Preferred Industry</h2>
+                        <div class="help-icon">
+                            <i class="fas fa-question-circle"></i>
+                            <div class="tooltip">Select the industry you're most interested in working in</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="preferredIndustry" required>
+                            <option value="" disabled selected>Select your preferred industry</option>
+                            <option value="it">IT</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="finance">Finance</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="government">Government</option>
+                            <option value="startup">Startup</option>
+                            <option value="research">Research</option>
+                            <option value="education">Education</option>
+                            <option value="media">Media</option>
+                            <option value="consulting">Consulting</option>
+                        </select>
+                        <div class="error-message">Please select your preferred industry</div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-text">Continue to Next Step</span>
+                        <div class="spinner"></div>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or default to light
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            updateThemeIcon(theme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Form Validation
+        const form = document.getElementById('userInputForm');
+        const educationLevel = document.getElementById('educationLevel');
+        const preferredIndustry = document.getElementById('preferredIndustry');
+        const interestsCheckboxes = document.querySelectorAll('input[name="interests"]');
+        const skillsCheckboxes = document.querySelectorAll('input[name="skills"]');
+        const interestsGroup = document.getElementById('interestsGroup');
+        const skillsGroup = document.getElementById('skillsGroup');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        // Real-time validation
+        educationLevel.addEventListener('change', () => {
+            validateField(educationLevel);
+        });
+
+        preferredIndustry.addEventListener('change', () => {
+            validateField(preferredIndustry);
+        });
+
+        interestsCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                validateCheckboxes(interestsCheckboxes, interestsGroup, 3);
+            });
+        });
+
+        skillsCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                validateCheckboxes(skillsCheckboxes, skillsGroup, 3);
+            });
+        });
+
+        function validateField(field) {
+            const formGroup = field.closest('.form-group');
+            if (field.value === '') {
+                formGroup.classList.add('error');
+                return false;
+            } else {
+                formGroup.classList.remove('error');
+                return true;
+            }
+        }
+
+        function validateCheckboxes(checkboxes, container, minRequired) {
+            const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            const formGroup = container.closest('.form-group');
+            
+            if (checked.length < minRequired) {
+                formGroup.classList.add('error');
+                return false;
+            } else {
+                formGroup.classList.remove('error');
+                return true;
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Validate all fields
+            const isEducationValid = validateField(educationLevel);
+            const isIndustryValid = validateField(preferredIndustry);
+            const areInterestsValid = validateCheckboxes(interestsCheckboxes, interestsGroup, 3);
+            const areSkillsValid = validateCheckboxes(skillsCheckboxes, skillsGroup, 3);
+            
+            if (isEducationValid && isIndustryValid && areInterestsValid && areSkillsValid) {
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                
+                // Collect form data
+                const formData = {
+                    educationLevel: educationLevel.value,
+                    interests: Array.from(interestsCheckboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value),
+                    skills: Array.from(skillsCheckboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value),
+                    preferredIndustry: preferredIndustry.value
+                };
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Save to localStorage (simulating sending to backend)
+                    localStorage.setItem('userInputData', JSON.stringify(formData));
+                    
+                    // Reset loading state
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                    
+                    // Show success message
+                    successMessage.classList.add('show');
+                    
+                    // Hide success message after 3 seconds
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 3000);
+                    
+                    // Update progress bar
+                    document.getElementById('progressFill').style.width = '66.66%';
+                    document.querySelector('.progress-steps').textContent = 'Step 2 of 3';
+                    
+                    // In a real application, you would navigate to the next step
+                    console.log('Form data submitted:', formData);
+                }, 1500);
+            }
+        });
+
+        // Reset form
+        resetBtn.addEventListener('click', () => {
+            form.reset();
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+            successMessage.classList.remove('show');
+        });
+
+        // Add hover effect to navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
