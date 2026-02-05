@@ -1,5 +1,5 @@
 // Global variables
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 let currentStep = 1;
 const totalSteps = 4;
 let selectedSkills = [];
