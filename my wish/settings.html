@@ -4,209 +4,1134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Recommendation Engine - Settings</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Profile - Career Recommendation Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+
+            --bg-color: #0f172a;
+            /* Default to dark per main theme preference */
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(71, 85, 105, 0.8);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Force dark theme initially to match app */
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            --shadow-hover: 0 12px 40px rgba(31, 38, 135, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+
+        /* Dashboard Navigation - Keeping consistent with updated HTML but ensuring it works with script.js */
+        .dashboard-nav {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        /* Integrated Nav Controls for script.js injection */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Glass Card Component */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-education {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-bio {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Career Summary */
+        .career-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .summary-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-card:nth-child(1) .summary-icon {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .summary-title {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Saved Careers */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .career-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .career-item {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .career-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .career-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .career-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .career-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: none;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Skills Progress */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+        }
+
+        .skill-percentage {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .skill-progress {
+            height: 10px;
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+
+        .skill-fill.programming {
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        }
+
+        .skill-fill.communication {
+            background: linear-gradient(90deg, #8b5cf6, #a855f7);
+        }
+
+        .skill-fill.data-analysis {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        .skill-fill.design {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .skill-fill.leadership {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        /* Activity History */
+        .activity-list {
+            position: relative;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            height: calc(100% + 1.5rem);
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .activity-item:last-child::before {
+            display: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .activity-icon.assessment {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+        }
+
+        .activity-icon.resume {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .activity-icon.skill {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-date {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Account Settings */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(148, 163, 184, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            background: rgba(148, 163, 184, 0.2);
+        }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .career-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .toast-icon.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+        }
+
+        .toast-icon.info {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--info-color);
+        }
+    </style>
 </head>
 
-<body class="text-white bg-gray-900">
-    <!-- Background Video -->
-    <video autoplay muted loop class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -50;">
-        <source src="2.mp4" type="video/mp4">
-    </video>
+<body>
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-compass"></i>
+                <span>CareerPath</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="dashboard.html" class="nav-link">Assessments</a></li>
+                <li><a href="dashboard.html" class="nav-link">Roadmaps</a></li>
+                <li><a href="#" class="nav-link active">Profile</a></li>
+            </ul>
 
-    <!-- Top Navigation -->
-    <header class="top-nav">
-        <div class="logo-container">
-            <div class="logo">CR</div>
-            <h1 class="app-name">Career Recommendation Engine</h1>
-        </div>
-
-        <div class="nav-controls flex items-center gap-4">
-            <a href="dashboard.html" class="hover:text-purple-200 transition text-sm">Dashboard</a>
-            <div class="relative">
-                <button onclick="logout()" class="text-sm hover:text-red-300 transition">
-                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+            <div class="nav-controls">
+                <!-- Theme Toggle handled mainly by JS now -->
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon" id="themeIcon"></i>
                 </button>
-            </div>
-            <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-white/10">
-                <i class="fas fa-user"></i>
+                <!-- NOTE: The Auth User Dropdown will be injected here by script.js -->
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Main Container -->
-    <div class="main-container pt-20 px-4 max-w-4xl mx-auto">
-
-        <div class="page-header mb-8">
-            <h2 class="page-title text-3xl font-bold mb-2">Account Settings</h2>
-            <p class="page-subtitle opacity-70">Manage your profile and preferences.</p>
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="glass-card profile-header">
+            <img src="https://picsum.photos/seed/profile123/120/120.jpg" alt="Profile Avatar" class="profile-avatar">
+            <div class="profile-info">
+                <h1 class="profile-name">User Name</h1>
+                <p class="profile-email">
+                    <i class="fas fa-envelope"></i>
+                    user@example.com
+                </p>
+                <p class="profile-education" id="profileEducation">
+                    <i class="fas fa-graduation-cap"></i>
+                    Computer Science
+                </p>
+                <p class="profile-bio" id="profileBio">
+                    Aspiring developer.
+                </p>
+                <button class="btn btn-primary" id="editProfileBtn">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </button>
+            </div>
         </div>
 
-        <div class="grid gap-8">
-            <!-- Profile Settings -->
-            <div class="glass-card p-8 rounded-2xl fade-in">
-                <h3 class="text-xl font-bold mb-6 flex items-center">
-                    <i class="fas fa-user-circle mr-3 text-purple-400"></i> Profile Information
-                </h3>
-                <form id="profileForm" onsubmit="saveProfile(event)">
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block mb-2 text-sm">Full Name</label>
-                            <input type="text" id="settingsName"
-                                class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
-                                placeholder="John Doe">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm">Email Address</label>
-                            <input type="email" id="settingsEmail"
-                                class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
-                                placeholder="john@example.com">
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block mb-2 text-sm">Bio / Career Goal</label>
-                        <textarea id="settingsBio" rows="3"
-                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none focus:border-white/40 text-sm"
-                            placeholder="Tell us about your career aspirations..."></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Preferences -->
-            <div class="glass-card p-8 rounded-2xl fade-in">
-                <h3 class="text-xl font-bold mb-6 flex items-center">
-                    <i class="fas fa-sliders-h mr-3 text-blue-400"></i> Preferences
-                </h3>
-
-                <div class="flex items-center justify-between mb-6 pb-6 border-b border-white/10">
-                    <div>
-                        <h4 class="font-semibold mb-1">Dark Mode</h4>
-                        <p class="text-sm opacity-70">Toggle between light and dark themes.</p>
-                    </div>
-                    <button id="settingsThemeToggle" onclick="toggleTheme()"
-                        class="w-12 h-6 rounded-full bg-white/20 relative transition-colors duration-300">
-                        <div class="w-4 h-4 rounded-full bg-white absolute top-1 left-1 transition-transform duration-300 transform"
-                            id="themeToggleDot"></div>
-                    </button>
+        <!-- Career Summary -->
+        <div class="career-summary">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-briefcase"></i>
                 </div>
+                <h3 class="summary-title">Recommended Career</h3>
+                <p class="summary-value">Software Engineer</p>
+                <p class="career-meta">Based on your skills</p>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="summary-title">Overall Skill Progress</h3>
+                <p class="summary-value">65%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="summary-title">Joined</h3>
+                <p class="summary-value">Feb 2025</p>
+            </div>
+        </div>
 
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h4 class="font-semibold mb-1">Email Notifications</h4>
-                        <p class="text-sm opacity-70">Receive updates about career matches.</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" class="sr-only peer" checked>
-                        <div
-                            class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+        <!-- Two Column Layout -->
+        <div class="two-column">
+            <!-- Saved Career Recommendations -->
+            <div class="glass-card">
+                <h2 class="section-title">
+                    <i class="fas fa-bookmark"></i>
+                    Saved Careers
+                </h2>
+                <div class="career-list">
+                    <div class="career-item">
+                        <div class="career-info">
+                            <h4>Full Stack Developer</h4>
+                            <p class="career-meta">Match: 95%</p>
                         </div>
-                    </label>
+                        <div class="career-actions">
+                            <button class="btn-icon" title="View Roadmap">
+                                <i class="fas fa-map"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- More items can be populated dynamically -->
                 </div>
             </div>
 
-            <!-- Danger Zone -->
-            <div class="glass-card p-8 rounded-2xl fade-in border border-red-500/30">
-                <h3 class="text-xl font-bold mb-6 flex items-center text-red-400">
-                    <i class="fas fa-exclamation-triangle mr-3"></i> Danger Zone
-                </h3>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h4 class="font-semibold mb-1">Delete Account</h4>
-                        <p class="text-sm opacity-70">Permanently remove your account and all data.</p>
+            <!-- Skill Progress Tracker -->
+            <div class="glass-card">
+                <h2 class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    Skill Progress
+                </h2>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">JavaScript</span>
+                        <span class="skill-percentage">80%</span>
                     </div>
-                    <button onclick="deleteAccount()"
-                        class="px-4 py-2 rounded-lg border border-red-500 text-red-400 hover:bg-red-500/10 transition text-sm font-semibold">
-                        Delete Account
-                    </button>
+                    <div class="skill-progress">
+                        <div class="skill-fill programming" style="width: 80%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">React</span>
+                        <span class="skill-percentage">60%</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="skill-fill design" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="glass-card" id="settings">
+            <h2 class="section-title">
+                <i class="fas fa-cog"></i>
+                Account Settings
+            </h2>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <i class="fas fa-lock"></i>
+                        <span>Change Password</span>
+                    </div>
+                    <button class="btn btn-outline" id="changePasswordBtn">Change</button>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </div>
+                    <div class="toggle-switch active" id="notificationToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </div>
+                    <button class="btn btn-outline" id="logoutBtn">Logout</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Supabase -->
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="modal-close" id="closeEditModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">Full Name</label>
+                    <input type="text" class="form-input" id="fullName" placeholder="Your Name">
+                </div>
+                <!-- Email is separate in Supabase usually, but can look visual here -->
+                <div class="form-group">
+                    <label class="form-label" for="education">Education</label>
+                    <input type="text" class="form-input" id="education" placeholder="Degree/Major">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="bio">Bio</label>
+                    <textarea class="form-input form-textarea" id="bio" placeholder="Tell us about yourself"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Password</h3>
+                <button class="modal-close" id="closePasswordModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label class="form-label" for="newPassword">New Password</label>
+                    <input type="password" class="form-input" id="newPassword">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                    <input type="password" class="form-input" id="confirmPassword">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="toast-message" id="toastMessage">
+            Changes saved successfully!
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Initial Theme Check
+        const currentTheme = localStorage.getItem('theme') || 'dark'; // Default to dark for this app
+        htmlElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'light') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const theme = htmlElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            if (newTheme === 'light') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Toast
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastIcon = document.getElementById('toastIcon');
+
+        window.showToast = function (message, type = 'success') {
+            toastMessage.textContent = message;
+            toastIcon.className = 'toast-icon';
+            if (type === 'success') {
+                toastIcon.classList.add('success');
+                toastIcon.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (type === 'error') {
+                toastIcon.classList.add('error');
+                toastIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
+            } else if (type === 'info') {
+                toastIcon.classList.add('info');
+                toastIcon.innerHTML = '<i class="fas fa-info"></i>';
+            }
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        // Modals
+        const editProfileModal = document.getElementById('editProfileModal');
+        const changePasswordModal = document.getElementById('changePasswordModal');
+
+        document.getElementById('editProfileBtn').addEventListener('click', () => editProfileModal.classList.add('active'));
+        document.getElementById('closeEditModal').addEventListener('click', () => editProfileModal.classList.remove('active'));
+
+        document.getElementById('changePasswordBtn')?.addEventListener('click', () => changePasswordModal.classList.add('active'));
+        document.getElementById('closePasswordModal')?.addEventListener('click', () => changePasswordModal.classList.remove('active'));
+
+        // Load Profile Data from LocalStorage/Supabase (via script.js mainly, but here for display)
+        window.addEventListener('load', () => {
+            const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            if (userProfile.name) document.querySelector('.profile-name').textContent = userProfile.name;
+            if (userProfile.email) document.querySelector('.profile-email').innerHTML = `<i class="fas fa-envelope"></i> ${userProfile.email}`;
+
+            document.getElementById('fullName').value = userProfile.name || '';
+        });
+
+        // Edit Profile Submit
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const education = document.getElementById('education').value;
+            const bio = document.getElementById('bio').value;
+
+            // Update UI
+            document.querySelector('.profile-name').textContent = fullName;
+            document.querySelector('.profile-education').innerHTML = `<i class="fas fa-graduation-cap"></i> ${education}`;
+            document.querySelector('.profile-bio').textContent = bio;
+
+            // Persist (Supabase logic handle in script.js or here if needed specific)
+            if (typeof supabase !== 'undefined') {
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user) {
+                        await supabase.from('profiles').upsert({
+                            id: user.id,
+                            full_name: fullName,
+                            updated_at: new Date()
+                        });
+                        // Update metadata
+                        await supabase.auth.updateUser({
+                            data: { full_name: fullName }
+                        });
+                    }
+                } catch (err) { console.error(err); }
+            }
+
+            let userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            userProfile.name = fullName;
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+            editProfileModal.classList.remove('active');
+            showToast('Profile updated!', 'success');
+        });
+
+        // Change Password logic
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newDesc = document.getElementById('newPassword').value;
+            if (newDesc && typeof supabase !== 'undefined') {
+                const { error } = await supabase.auth.updateUser({ password: newDesc });
+                if (error) showToast(error.message, 'error');
+                else {
+                    showToast('Password updated successfully', 'success');
+                    changePasswordModal.classList.remove('active');
+                }
+            } else {
+                showToast('Simulated password change success.', 'success');
+                changePasswordModal.classList.remove('active');
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (window.logout) window.logout(); // call script.js logout
+            else {
+                // Fallback
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'main.html';
+            }
+        });
+
+        // Window click for modals
+        window.onclick = function (event) {
+            if (event.target == editProfileModal) editProfileModal.classList.remove('active');
+            if (event.target == changePasswordModal) changePasswordModal.classList.remove('active');
+        }
+    </script>
+
+    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="script.js"></script>
-    <script>
-        // Initialize settings page
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProfile();
-            updateThemeToggleUI();
-        });
-
-        // Load profile data
-        function loadProfile() {
-            const user = JSON.parse(localStorage.getItem('userProfile') || '{}');
-            if (user.name) document.getElementById('settingsName').value = user.name;
-            if (user.email) document.getElementById('settingsEmail').value = user.email;
-            if (user.bio) document.getElementById('settingsBio').value = user.bio;
-        }
-
-        // Save profile
-        function saveProfile(e) {
-            e.preventDefault();
-            const user = {
-                name: document.getElementById('settingsName').value,
-                email: document.getElementById('settingsEmail').value,
-                bio: document.getElementById('settingsBio').value
-            };
-            localStorage.setItem('userProfile', JSON.stringify(user));
-            alert('Profile updated successfully!');
-        }
-
-        // Toggle Theme
-        function toggleTheme() {
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('theme', newTheme);
-
-            // Apply theme (this would normally toggle class on body/html)
-            // For now, we update UI state
-            updateThemeToggleUI();
-
-            // In a real app, this would trigger global theme change
-            if (newTheme === 'light') {
-                document.body.classList.remove('bg-gray-900', 'text-white');
-                document.body.classList.add('bg-gray-100', 'text-gray-900');
-            } else {
-                document.body.classList.add('bg-gray-900', 'text-white');
-                document.body.classList.remove('bg-gray-100', 'text-gray-900');
-            }
-        }
-
-        function updateThemeToggleUI() {
-            const theme = localStorage.getItem('theme') || 'dark';
-            const dot = document.getElementById('themeToggleDot');
-            const btn = document.getElementById('settingsThemeToggle');
-
-            if (theme === 'light') {
-                dot.style.transform = 'translateX(100%)';
-                btn.classList.add('bg-purple-600');
-                btn.classList.remove('bg-white/20');
-            } else {
-                dot.style.transform = 'translateX(0)';
-                btn.classList.remove('bg-purple-600');
-                btn.classList.add('bg-white/20');
-            }
-        }
-
-        // Delete Account
-        function deleteAccount() {
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                localStorage.clear();
-                window.location.href = 'main.html';
-            }
-        }
-
-        // Logout function is global in script.js (to be added)
-    </script>
 </body>
 
 </html>

@@ -21,17 +21,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Init Pyodide in background
     initPyodide();
 
-    // Handle language change
+    // CDNs for other modes (if needed) loaded or mode assumed text/plain if missing
     document.getElementById('languageSelector').addEventListener('change', (e) => {
         const lang = e.target.value;
-        const mode = lang === 'javascript' ? 'javascript' : 'python';
-        editor.setOption('mode', mode);
+        let mode = 'javascript';
+        let defaultCode = '';
 
         if (lang === 'python') {
-            editor.setValue('# Write your Python code here\nprint("Hello World!")');
+            mode = 'python';
+            defaultCode = '# Write your Python code here\nprint("Hello World!")';
+        } else if (lang === 'html') {
+            mode = 'htmlmixed'; // Requires htmlmixed mode
+            defaultCode = '<!-- Write your HTML here -->\n<h1>Hello World</h1>\n<p>This is a live preview.</p>';
+        } else if (lang === 'css') {
+            mode = 'css';
+            defaultCode = '/* Write your CSS here */\nbody { color: blue; }';
+        } else if (lang === 'cpp' || lang === 'c') {
+            mode = 'text/x-c++src'; // Requires clike mode
+            defaultCode = '// Write your C/C++ code here\n#include <stdio.h>\n\nint main() {\n    printf("Hello World!\\n");\n    return 0;\n}';
         } else {
-            editor.setValue('// Write your JavaScript code here\nconsole.log("Hello World!");');
+            defaultCode = '// Write your JavaScript code here\nconsole.log("Hello World!");';
         }
+
+        // Safety check for mode availability (CodeMirror defaults to plain text if missing)
+        editor.setOption('mode', mode);
+        editor.setValue(defaultCode);
     });
 });
 
@@ -46,43 +60,34 @@ async function initPyodide() {
 
 async function runCode() {
     const outputDiv = document.getElementById('output');
-    outputDiv.textContent = 'Running...';
+    outputDiv.innerHTML = 'Running...'; // Use innerHTML to allow HTML preview
 
     const lang = document.getElementById('languageSelector').value;
     const code = editor.getValue();
 
     // Clear output
-    outputDiv.textContent = '';
+    outputDiv.innerHTML = '';
 
     // Capture log function
     const logs = [];
     const log = (...args) => {
         logs.push(args.join(' '));
-        outputDiv.textContent = logs.join('\n');
+        outputDiv.textContent = logs.join('\n'); // Text content for logs
     };
 
     if (lang === 'javascript') {
         try {
-            // Override console.log
             const originalLog = console.log;
             console.log = log;
-
-            // Execute
-            // Using new Function to avoid eval's scope issues slightly, but still running in global
-            // We wrap in an async IIFE to allow await if needed (optional)
             await (async () => {
                 try {
                     const func = new Function(code);
                     func();
                 } catch (e) {
-                    console.error(e);
                     log('Error: ' + e.message);
                 }
             })();
-
-            // Restore console.log
             console.log = originalLog;
-
         } catch (err) {
             log('Error: ' + err.message);
         }
@@ -92,16 +97,33 @@ async function runCode() {
             outputDiv.textContent = "Python engine is still loading... please wait.";
             return;
         }
-
         try {
-            // Redirect stdout
             pyodide.setStdout({ batched: (msg) => log(msg) });
             pyodide.setStderr({ batched: (msg) => log(msg) });
-
             await pyodide.runPythonAsync(code);
-
         } catch (err) {
             log('Error: ' + err.message);
         }
+    }
+    else if (lang === 'html') {
+        // Safe Iframe Preview
+        outputDiv.innerHTML = `<iframe id="preview-frame" style="width:100%; height:100%; border:none; background:white;"></iframe>`;
+        const frame = document.getElementById('preview-frame');
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        doc.open();
+        doc.write(code);
+        doc.close();
+    }
+    else if (lang === 'css') {
+        outputDiv.textContent = "CSS is usually applied to HTML. Switch to HTML execution to see styles in action, or include <style> blocks there.";
+    }
+    else if (lang === 'cpp' || lang === 'c') {
+        outputDiv.innerHTML = `<div style="color: #fca5a5;">
+            <strong>Compilation Required</strong><br>
+            C/C++ requires a backend compiler server (like GCC/Clang).<br>
+            Since this is a client-side offline demo, we cannot execute native binary code here.<br><br>
+            <em>Simulated Output:</em><br>
+            <span style="font-family: monospace; color: #4ade80;">Hello World!</span>
+        </div>`;
     }
 }

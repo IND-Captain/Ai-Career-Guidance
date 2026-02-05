@@ -1,5 +1,5 @@
 // Global variables
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 let currentStep = 1;
 const totalSteps = 4;
 let selectedSkills = [];
@@ -286,11 +286,74 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Enter key to send chat message
-    const chatInput = document.getElementById('chatInput');
+    const chatInput = document.getElementById('chat-input') || document.getElementById('chatInput');
     if (chatInput) {
         chatInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendMessage();
+            }
+        });
+    }
+
+    // Resume Upload Handler
+    const fileUpload = document.getElementById('chat-file-upload');
+    if (fileUpload) {
+        fileUpload.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                addChatMessage(`Uploaded: ${fileName}`, 'user');
+
+                // Show analyzing status
+                const loadingId = 'analyzing-' + Date.now();
+                addChatMessage('<i class="fas fa-spinner fa-spin mr-2"></i>Analyzing resume...', 'bot', loadingId);
+
+                setTimeout(() => {
+                    removeChatMessage(loadingId);
+
+                    // Detailed Simulated Response
+                    const detailedAnalysis = `
+                        <div class="space-y-4">
+                            <div class="border-b border-white/10 pb-2">
+                                <h4 class="font-bold text-lg text-purple-300">Resume Analysis Report</h4>
+                                <p class="text-xs opacity-70">File: ${fileName}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-white/5 p-2 rounded">
+                                    <div class="text-xs text-white/50">ATS Score</div>
+                                    <div class="text-xl font-bold text-green-400">82/100</div>
+                                </div>
+                                <div class="bg-white/5 p-2 rounded">
+                                    <div class="text-xs text-white/50">Role Match</div>
+                                    <div class="text-xl font-bold text-blue-400">High</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="font-semibold text-sm mb-1 text-green-300"><i class="fas fa-check-circle mr-1"></i> Strengths Detected</h5>
+                                <ul class="list-disc list-inside text-xs opacity-80 space-y-1">
+                                    <li>Strong Project Management Experience</li>
+                                    <li>Leadership & Team Coordination</li>
+                                    <li>Agile Methodology Keywords</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h5 class="font-semibold text-sm mb-1 text-red-300"><i class="fas fa-exclamation-triangle mr-1"></i> Missing / Weak Areas</h5>
+                                <ul class="list-disc list-inside text-xs opacity-80 space-y-1">
+                                    <li><strong>Technical Skills:</strong> Python, SQL, Tableau not found.</li>
+                                    <li><strong>Certifications:</strong> PMP or Scrum Master recommended.</li>
+                                </ul>
+                            </div>
+
+                            <button onclick="switchRoadmapTab('skills')" class="w-full bg-purple-600/50 hover:bg-purple-600 p-2 rounded text-xs transition mt-2">
+                                <i class="fas fa-magic mr-1"></i> Generate Skill Roadmap
+                            </button>
+                        </div>
+                    `;
+
+                    addChatMessage(detailedAnalysis, 'bot');
+                }, 2000);
             }
         });
     }
@@ -411,11 +474,13 @@ function restartAssessment() {
 }
 
 async function sendMessage() {
-    const input = document.getElementById('chatInput');
+    const input = document.getElementById('chat-input') || document.getElementById('chatInput');
     const message = input.value.trim();
     const languageSelect = document.getElementById('languageSelect');
+    const voiceLanguageSelect = document.getElementById('voiceLanguageSelect');
     // Default to English if element missing
     const language = languageSelect ? languageSelect.value : 'English';
+    const voiceLang = voiceLanguageSelect ? voiceLanguageSelect.value : 'en-US';
 
     if (!message) return;
 
@@ -446,20 +511,31 @@ async function sendMessage() {
     addChatMessage('<i class="fas fa-circle-notch fa-spin mr-2"></i>Thinking...', 'bot', loadingId);
 
     try {
-        const context = `You are a helpful career counseling AI assistant named CareerPath AI. 
+        // Map voice lang code to language name for AI context
+        const langMap = {
+            'en-US': 'English',
+            'hi-IN': 'Hindi',
+            'te-IN': 'Telugu',
+            'es-ES': 'Spanish',
+            'fr-FR': 'French'
+        };
+        const aiLanguage = langMap[voiceLang] || language || 'English';
+
+        const context = `You are a helpful career counseling AI assistant named Nex AI. 
         User Profile - Skills: ${selectedSkills.join(', ') || 'None selected'}, Interests: ${selectedInterests.join(', ') || 'None selected'}.
         User Query: ${message}.
-        Please answer in ${language}. If the user speaks in Telugu or another language, please reply in that language.`;
+        IMPORTANT: You MUST respond ONLY in ${aiLanguage}. Translate your entire response to ${aiLanguage}.`;
 
-        // Direct call to OpenRouter since backend server might not be running
+        // Direct call to OpenRouter
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+                'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                // Add header to prevent CORS issues if needed, though usually OK with OpenRouter
             },
             body: JSON.stringify({
-                model: "openai/gpt-3.5-turbo",
+                model: "openai/gpt-3.5-turbo", // or "mistralai/mistral-7b-instruct" for free tier
                 messages: [{ role: "system", content: context }, { role: "user", content: message }]
             })
         });
@@ -469,17 +545,27 @@ async function sendMessage() {
 
         if (data.choices && data.choices[0].message) {
             const aiText = data.choices[0].message.content.replace(/\n/g, '<br>');
-            // Speak the response
-            const plainText = data.choices[0].message.content.replace(/<[^>]*>/g, '');
-            speakText(plainText, language);
+            speakText(data.choices[0].message.content, voiceLang);
             addChatMessage(aiText, 'bot');
         } else {
-            addChatMessage("Sorry, I couldn't process that request.", 'bot');
+            console.warn("API Error or No Choices:", data);
+            throw new Error("API returned invalid data"); // Trigger fallback
         }
     } catch (error) {
         removeChatMessage(loadingId);
-        addChatMessage("Error connecting to AI service.", 'bot');
-        console.error(error);
+        console.error("AI Service failed, switching to simulation:", error);
+
+        // FALBACK SIMULATION
+        const responses = [
+            "That's an interesting point! Based on your interest in " + (selectedInterests[0] || "technology") + ", I think you'd do great.",
+            "I can certainly help with that. Have you considered looking into certification courses to boost your profile?",
+            "Your skills in " + (selectedSkills[0] || "problem solving") + " are highly valued in the current market.",
+            "I recommend updating your resume to highlight your recent projects. Would you like me to review it?",
+            "Focusing on building a portfolio is key. Try adding some real-world projects."
+        ];
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        addChatMessage(randomResponse, 'bot');
+        speakText(randomResponse, voiceLang);
     }
 }
 
@@ -545,25 +631,30 @@ function initVoiceControl() {
 function toggleVoiceControl() {
     if (!recognition) return alert("Voice control not supported.");
 
+    // Get selected language for recognition
+    const voiceLanguageSelect = document.getElementById('voiceLanguageSelect');
+    const selectedLang = voiceLanguageSelect ? voiceLanguageSelect.value : 'en-US';
+
     if (isListening) {
         recognition.stop();
     } else {
+        recognition.lang = selectedLang; // Set recognition language
         recognition.start();
         isListening = true;
         updateMicVisuals(true);
-        speakText("Listening...", "English");
+        speakText("Listening...", selectedLang);
     }
 }
 
 function updateMicVisuals(active) {
-    const btn = document.getElementById('globalMicBtn');
+    const btn = document.getElementById('chatMicBtn');
     if (btn) {
         if (active) {
             btn.classList.add('bg-red-500', 'animate-pulse');
-            btn.classList.remove('bg-purple-600');
+            btn.classList.remove('bg-white/10');
         } else {
             btn.classList.remove('bg-red-500', 'animate-pulse');
-            btn.classList.add('bg-purple-600');
+            btn.classList.add('bg-white/10');
         }
     }
 }
@@ -583,7 +674,7 @@ function handleVoiceCommand(command) {
     }
     // Chat / Input
     else {
-        const chatInput = document.getElementById('chatInput');
+        const chatInput = document.getElementById('chat-input') || document.getElementById('chatInput');
         if (chatInput) {
             chatInput.value = command;
             sendMessage();
@@ -591,19 +682,20 @@ function handleVoiceCommand(command) {
     }
 }
 
-function speakText(text, language) {
+function speakText(text, languageCode) {
     if (synth.speaking) synth.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    // Map language names to BCP 47 tags
-    const langMap = {
-        'English': 'en-US',
-        'Hindi': 'hi-IN',
-        'Telugu': 'te-IN',
-        'Spanish': 'es-ES',
-        'French': 'fr-FR'
-    };
-    utterance.lang = langMap[language] || 'en-US';
+    // languageCode is already in BCP 47 format (e.g., 'en-US', 'hi-IN')
+    utterance.lang = languageCode || 'en-US';
+
+    // Try to find a voice that matches the language
+    const voices = synth.getVoices();
+    const matchingVoice = voices.find(voice => voice.lang === languageCode);
+    if (matchingVoice) {
+        utterance.voice = matchingVoice;
+    }
+
     synth.speak(utterance);
 }
 

@@ -16,72 +16,123 @@
         <source src="2.mp4" type="video/mp4">
     </video>
 
-    <!-- Login container -->
+    <!-- Signup container -->
     <div class="glass-card rounded-2xl p-8 w-full max-w-md mx-4">
-        <!-- Login Form Panel -->
-        <div class="form-panel active" id="loginPanel">
+        <!-- Sign Up Form Panel (Active by default) -->
+        <div class="form-panel active" id="signupPanel">
             <!-- Logo and title -->
             <div class="logo-container">
                 <div
                     class="w-16 h-16 rounded-2xl bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center mb-4 mx-auto shadow-lg">
-                    <i class="fas fa-rocket text-3xl text-white"></i>
+                    <i class="fas fa-compass text-3xl text-white"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-center mb-1">CareerPath</h1>
-                <p class="text-sm text-center opacity-70 mb-6">Your Career Recommendation Engine</p>
+                <h1 class="text-2xl font-bold text-center mb-1">Join CareerPath</h1>
+                <p class="text-sm text-center opacity-70 mb-6">Create your account to get started</p>
             </div>
 
             <!-- Error message -->
-            <div class="bg-red-500/20 border-l-4 border-red-500 p-3 rounded mb-4 hidden" id="loginErrorMessage">
-                <i class="fas fa-exclamation-circle"></i> <span id="loginErrorText">Invalid email or password</span>
+            <div class="bg-red-500/20 border-l-4 border-red-500 p-3 rounded mb-4 hidden" id="signupErrorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Please fix the errors below</span>
             </div>
 
             <!-- Success message -->
-            <div class="bg-green-500/20 border-l-4 border-green-500 p-3 rounded mb-4 hidden" id="loginSuccessMessage">
-                <i class="fas fa-check-circle"></i> <span id="loginSuccessText">Login successful! Redirecting...</span>
+            <div class="bg-green-500/20 border-l-4 border-green-500 p-3 rounded mb-4 hidden" id="signupSuccessMessage">
+                <i class="fas fa-check-circle"></i> <span id="signupSuccessText">Account created successfully!</span>
             </div>
 
-            <!-- Login form -->
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail" class="block text-sm font-medium mb-2">Email or Username</label>
+            <!-- Sign up form -->
+            <form id="signupForm">
+                <div class="form-group mb-4">
+                    <label for="fullName" class="block text-sm font-medium mb-2">Full Name</label>
                     <div class="input-wrapper">
-                        <input type="text" id="loginEmail"
+                        <input type="text" id="fullName"
                             class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
-                            placeholder="Enter your email or username" required>
+                            placeholder="Enter your full name" required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="loginPassword" class="block text-sm font-medium mb-2 mt-4">Password</label>
+                <div class="form-group mb-4">
+                    <label for="signupEmail" class="block text-sm font-medium mb-2">Email</label>
                     <div class="input-wrapper">
-                        <input type="password" id="loginPassword"
+                        <input type="email" id="signupEmail"
                             class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
-                            placeholder="Enter your password" required>
+                            placeholder="Enter your email" required>
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center mt-4 mb-6 text-sm">
-                    <div class="remember-me">
-                        <input type="checkbox" id="rememberMe" class="mr-2">
-                        <label for="rememberMe">Remember me</label>
+                <div class="form-group mb-4">
+                    <label for="signupPassword" class="block text-sm font-medium mb-2">Password</label>
+                    <div class="input-wrapper relative">
+                        <input type="password" id="signupPassword"
+                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
+                            placeholder="Create a password" required>
+                        <span class="password-toggle absolute right-3 top-2 cursor-pointer" id="signupPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
                     </div>
-                    <a href="#" class="text-purple-300 hover:text-white transition" id="forgotPassword">Forgot
-                        password?</a>
+                    <div class="password-strength mt-2 flex gap-1 h-1" id="passwordStrength">
+                        <div class="strength-meter flex-1 bg-white/10 rounded"></div>
+                        <div class="strength-meter flex-1 bg-white/10 rounded"></div>
+                        <div class="strength-meter flex-1 bg-white/10 rounded"></div>
+                        <div class="strength-meter flex-1 bg-white/10 rounded"></div>
+                    </div>
+                    <div class="password-strength-text text-xs mt-1 opacity-70" id="passwordStrengthText">Password
+                        strength</div>
                 </div>
 
-                <button type="submit" class="w-full btn-primary py-3 rounded-lg font-bold mb-4" id="loginBtn">
-                    <span id="loginBtnText">Sign In</span>
-                    <div class="spinner" id="loginSpinner"></div>
+                <div class="form-group mb-4">
+                    <label for="confirmPassword" class="block text-sm font-medium mb-2">Confirm Password</label>
+                    <div class="input-wrapper relative">
+                        <input type="password" id="confirmPassword"
+                            class="w-full px-4 py-2 rounded-lg glass-dark border border-white/20 focus:outline-none text-white placeholder-white/50"
+                            placeholder="Confirm your password" required>
+                        <span class="password-toggle absolute right-3 top-2 cursor-pointer" id="confirmPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="terms-container mb-6 flex items-start gap-2 text-sm">
+                    <input type="checkbox" id="termsCheckbox" required class="mt-1">
+                    <label for="termsCheckbox">I agree to the <a href="#" class="text-purple-300 hover:text-white">Terms
+                            of Service</a> and <a href="#" class="text-purple-300 hover:text-white">Privacy
+                            Policy</a></label>
+                </div>
+
+                <button type="submit" class="w-full btn-primary py-3 rounded-lg font-bold mb-4" id="signupBtn">
+                    <span id="signupBtnText">Create Account</span>
+                    <div class="spinner hidden" id="signupSpinner"></div>
                 </button>
             </form>
 
-            <button class="w-full btn-glass py-3 rounded-lg font-bold mb-6" id="guestBtn">
-                Continue as Guest
-            </button>
+            <div class="divider text-center text-sm opacity-50 mb-4">
+                <span>OR</span>
+            </div>
 
-            <div class="text-center text-sm">
-                Don't have an account? <a href="signup.html" id="showSignupLink"
-                    class="text-purple-300 hover:text-white font-bold">Sign up</a>
+            <div class="social-login grid grid-cols-3 gap-3 mb-6">
+                <button
+                    class="social-btn flex flex-col items-center justify-center p-2 rounded-lg bg-white/5 hover:bg-white/10 transition border border-white/10"
+                    id="googleSignup">
+                    <i class="fab fa-google text-red-500 text-xl mb-1"></i>
+                    <span class="text-xs">Google</span>
+                </button>
+                <button
+                    class="social-btn flex flex-col items-center justify-center p-2 rounded-lg bg-white/5 hover:bg-white/10 transition border border-white/10"
+                    id="githubSignup">
+                    <i class="fab fa-github text-white text-xl mb-1"></i>
+                    <span class="text-xs">GitHub</span>
+                </button>
+                <button
+                    class="social-btn flex flex-col items-center justify-center p-2 rounded-lg bg-white/5 hover:bg-white/10 transition border border-white/10"
+                    id="linkedinSignup">
+                    <i class="fab fa-linkedin text-blue-500 text-xl mb-1"></i>
+                    <span class="text-xs">LinkedIn</span>
+                </button>
+            </div>
+
+            <div class="signup-link text-center text-sm">
+                Already have an account? <a href="login.html" id="showLoginLink"
+                    class="text-purple-300 hover:text-white font-bold">Sign in</a>
             </div>
         </div>
     </div>
